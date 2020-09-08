@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration</title>
+    <style>
+        label{
+            width: 70px;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <h3>Welcome to registration</h3>
+
+    <br>
+    <div>
+        <form action="/register" method="post">
+            <div>
+                
+                <label for="username">Username: </label>
+                <input type="text" id="username" name="uname" required>
+            
+            </div><br>
+            <div>
+
+                <label for="pass">Password: </label>
+                <input type="text" id="pass" name="password" required>
+            
+            </div><br>
+            <div>
+
+                <label for="agee">Age: </label>
+                <input type="text" id="agee" name="age" required>
+            
+            </div><br>
+
+            <input type="submit" value="Register">
+        </form>
+    </div>
+    <br>
+    <a href="/login">Login</a>
+</body>
+</html>
