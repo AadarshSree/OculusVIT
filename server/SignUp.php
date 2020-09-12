@@ -1,7 +1,63 @@
+<?php
+
+###############
+
+// FEATURES TO IMPLEMENT:
+// [*] Activate Session for successfull registration and redirect to login
+
+###############
+	require_once "mysqlConfig.php";
+
+	$name = $email = $username = $pass = $verifypass = "";
+	$err = null;
+
+	if($_SERVER["REQUEST_METHOD"] == "POST"){
+
+		if(empty(trim($_POST["name"])) || empty(trim($_POST["email"])) || empty(trim($_POST["username"])) 
+		|| empty(trim($_POST["pass"])) || empty(trim($_POST["verifypass"])) ){
+			$err = "Please enter all details.";
+		}
+		else if( trim($_POST["pass"]) === trim($_POST["verifypass"]) ){
+
+			
+
+			$sql = "INSERT INTO `faculties`( `username`, `password`, `email` , `name`) VALUES (?,?,?,?)";
+
+			if($stmt = mysqli_prepare($sql_api,$sql))
+			{
+
+				$username =  trim($_POST["username"]);
+				$email = trim($_POST["email"]);
+				$name = trim($_POST["name"]);
+				$pass = trim($_POST["pass"]);
+
+				mysqli_stmt_bind_param($stmt , "ssss", $username , $pass , $email, $name);
+				
+				if(mysqli_stmt_execute($stmt)){
+					echo "done zo";
+				}
+				else{
+					die("Fatal error (INSERTION) : ". mysqli_error($sql_api));
+				}
+			}
+			else{
+				die("Fatal Error (STMT) : ".mysqli_error($sql_api));
+			}
+
+
+		}
+		else{
+			$err = "Password and Verify Password don't match :(";
+		}
+
+	}
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<title>Oculus</title>
+	<title>Sign Up | Oculus-VIT</title>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 <!--===============================================================================================-->	
@@ -32,6 +88,7 @@
 
 
 </head>
+
 <body style="background-color: #999999;">
 	
 	<div class="limiter">
@@ -40,7 +97,8 @@
 </div>
 
 			<div class="wrap-login100 p-l-50 p-r-50 p-t-72 p-b-50">
-				<form class="login100-form validate-form">
+
+				<form class="login100-form validate-form" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST" autocomplete="off">
 					<span class="login100-form-title p-b-59">
 						Sign Up
 					</span>
@@ -53,7 +111,7 @@
 
 					<div class="wrap-input100 validate-input" data-validate = "Valid email is required: ex@abc.xyz">
 						<span class="label-input100">Email</span>
-						<input class="input100" type="text" name="email" placeholder="Email addess...">
+						<input class="input100" type="text" name="email" placeholder="Email address...">
 						<span class="focus-input100"></span>
 					</div>
 
@@ -65,24 +123,35 @@
 
 					<div class="wrap-input100 validate-input" data-validate = "Password is required">
 						<span class="label-input100">Password</span>
-						<input class="input100" type="text" name="pass" placeholder="*************">
+						<input class="input100" type="password" name="pass" placeholder="*************">
 						<span class="focus-input100"></span>
 					</div>
 
 					<div class="wrap-input100 validate-input" data-validate = "Repeat Password is required">
 						<span class="label-input100">Repeat Password</span>
-						<input class="input100" type="text" name="repeat-pass" placeholder="*************">
+						<input class="input100" type="password" name="verifypass" placeholder="*************">
 						<span class="focus-input100"></span>
 					</div>
 
+
+					<!-- Custom error using bootstrap -->
+					<?php if (isset($err)){ ?>
+						<div class="alert alert-danger" role="alert">
+							<?php
+								echo $err;
+							?>
+						</div>
+					<?php }; ?>
+						<!-- END -->
 					
 
 					<div class="container-login100-form-btn">
 						<div class="wrap-login100-form-btn">
 							<div class="login100-form-bgbtn"></div>
-							<button class="login100-form-btn">
+							<button class="login100-form-btn" type="submit">
 								Sign Up
 							</button>
+							
 						</div>
 
 						<a href="./Login.php" class="dis-block txt3 hov1 p-r-30 p-t-10 p-b-10 p-l-30">

@@ -1,7 +1,7 @@
 <?php
 session_start();
+//landing page simulator
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -21,6 +21,7 @@ session_start();
         echo 'ok session is set @'. $_SESSION['authID'] ;
     } else {
         echo 'no sesssion set';
+        //redirect to login
     }
     ?>
     <br><br>

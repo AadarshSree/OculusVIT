@@ -1,30 +1,79 @@
 <?php
 session_start();
 
+// #################
+
+// NEED TO INCLUDE FEATURE:
+// [*] Redirect user to landing on pre existing session being detected
+// [*] Implement Session from Reg page so as to redirect to landing
+
+// #################
+
+require_once "mysqlConfig.php";
+
 $isError = null;
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-	$isError = "Received: " . $_POST["username"] . " & " . $_POST["passwd"];
 
-	if($_POST["username"] == "w" && $_POST["passwd"] == "w")
-	{
-		//lets go auth
-		$_SESSION['authID'] = $_POST["username"];
-		header("location: landing.php");
-		exit;
-	}
-	else{
-		//error message
-		$isError = "Auth feil";
-	}
-}
+    if (isset($_POST["username"]) && isset($_POST["passwd"])) {
+
+        if (!(empty($_POST["username"]) || empty($_POST["passwd"]))) {
+
+            $username = trim($_POST["username"]);
+            $passwd = trim($_POST["passwd"]);
+
+            $query = "SELECT `fid` FROM `faculties` WHERE username like ? AND password LIKE ?";
+
+            if ($stmt = mysqli_prepare($sql_api, $query)) {
+
+                mysqli_stmt_bind_param($stmt, "ss", $username, $passwd);
+
+                if (mysqli_stmt_execute($stmt)) {
+
+                    mysqli_stmt_store_result($stmt);
+
+                    if (mysqli_stmt_num_rows($stmt) >= 1) {
+
+                        $fid = -1;
+                        mysqli_stmt_bind_result($stmt, $fid);
+                        if (mysqli_stmt_fetch($stmt)) {
+                            if ($fid > 0) {
+                                //Authenticated
+                                $_SESSION['authID'] = $fid;
+                                header("location: landing.php");
+                                exit;
+
+							}
+							else {
+								$isError = "Authentication failed ! :(";
+							}
+						}
+						else {
+							$isError = "Authentication failed ! :(";
+						}
+
+                    } else {
+                        $isError = "Wrong Username OR Password ! :(";
+                    }
+
+                }
+            }
+
+        } else {
+            $isError = "Enter Username and Password !";
+        }
+
+    } // end of form validation
+
+    
+} // end of post req handle
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-	<title>Oculus-VIT</title>
+	<title>Login | Oculus-VIT</title>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -86,13 +135,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 					<div>
 
-						<?php if (isset($isError)){ ?>
+						<!-- Custom error using bootstrap -->
+						<?php if (isset($isError)) {?>
 						<div class="alert alert-danger" role="alert">
 							<?php
-							echo $isError;
+								echo $isError;
 							?>
 						</div>
-						<?php }; ?>
+						<?php };?>
+						<!-- END -->
 					</div>
 
 					<div class="container-login100-form-btn">
