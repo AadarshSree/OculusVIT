@@ -164,9 +164,68 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 							<i class="fa fa-long-arrow-right m-l-5"></i>
 						</a>
 
+							<br><br><br><br><br>
+
+						<a href="#" class="dis-block txt3 hov1 p-r-30 p-t-30 p-b-10 p-l-10" data-toggle="modal" data-target="#facultyModal">
+							Faculty Login
+							<i class="fa fa-long-arrow-right m-l-5"></i>
+						</a>
+
 					</div>
 
 				</form>
+			</div>
+		</div>
+	</div>
+
+
+	<!--Modal Popup division-->
+	<div class="modal fade" id="facultyModal">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<p>Login Details</p>
+				</div>
+				<form name="facLogin" class="login100-form validate-form" method="POST" action="">
+					<div class="modal-body">
+						<div class="container">
+							<p>
+								<div class="wrap-input100 validate-input" data-validate="Username is required">
+									Username:<br> 
+									<input name="fac_id" type="text" class="input100" placeholder="Username">
+									<span class="focus-input100"></span>
+								</div>
+								<div class="wrap-input100 validate-input" data-validate="Password is required">
+									Password:<br> 
+									<input name="fac_pass" type="password" class="input100" placeholder="********">
+									<span class="focus-input100"></span>
+								</div>
+							</p>
+						</div>
+					</div>
+				</form>
+
+				<div class="modal-footer">
+				<div>
+									<!-- Custom error using bootstrap -->
+									<?php if (isset($isError)) {?>
+									<div class="alert alert-danger" role="alert">
+										<?php
+											echo $isError;
+										?>
+									</div>
+									<?php };?>
+									<!-- END -->
+				</div>
+
+				<div class="wrap-login100-form-btn">
+					<div class="login100-form-bgbtn"></div>
+						<button class="login100-form-btn">
+							Login
+						</button>
+					</div>
+					<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+				</div>
 			</div>
 		</div>
 	</div>
