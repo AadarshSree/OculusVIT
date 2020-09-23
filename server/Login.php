@@ -15,12 +15,14 @@ $isError = null;
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    if (isset($_POST["username"]) && isset($_POST["passwd"])) {
+	
+	//faculty
+	if(isset($_POST["fac_id"]) && isset($_POST["fac_pass"])){
 
-        if (!(empty($_POST["username"]) || empty($_POST["passwd"]))) {
+		if (!(empty($_POST["fac_id"]) || empty($_POST["fac_pass"]))) {
 
-            $username = trim($_POST["username"]);
-            $passwd = trim($_POST["passwd"]);
+            $username = trim($_POST["fac_id"]);
+            $passwd = trim($_POST["fac_pass"]);
 
             $query = "SELECT `fid` FROM `faculties` WHERE username like ? AND password LIKE ?";
 
@@ -39,7 +41,61 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         if (mysqli_stmt_fetch($stmt)) {
                             if ($fid > 0) {
                                 //Authenticated
-                                $_SESSION['authID'] = $fid;
+								$_SESSION['authID'] = $fid;
+								$_SESSION['role'] = "faculty";
+
+                                header("location: landing.php");
+                                exit;
+
+							}
+							else {
+								$isError = "Authentication failed ! :(";
+							}
+						}
+						else {
+							$isError = "Authentication failed ! :(";
+						}
+
+                    } else {
+                        $isError = "Wrong Username OR Password ! :(";
+                    }
+
+                }
+            }
+
+        } else {
+            $isError = "Enter Username and Password !";
+        }
+	}
+
+	//student
+    if (isset($_POST["username"]) && isset($_POST["passwd"])) {
+		
+
+        if (!(empty($_POST["username"]) || empty($_POST["passwd"]))) {
+
+            $username = trim($_POST["username"]);
+            $passwd = trim($_POST["passwd"]);
+
+            $query = "SELECT `sid` FROM `students` WHERE username like ? AND password LIKE ?";
+
+            if ($stmt = mysqli_prepare($sql_api, $query)) {
+
+                mysqli_stmt_bind_param($stmt, "ss", $username, $passwd);
+
+                if (mysqli_stmt_execute($stmt)) {
+
+                    mysqli_stmt_store_result($stmt);
+
+                    if (mysqli_stmt_num_rows($stmt) >= 1) {
+
+                        $fid = -1;
+                        mysqli_stmt_bind_result($stmt, $fid);
+                        if (mysqli_stmt_fetch($stmt)) {
+                            if ($fid > 0) {
+                                //Authenticated
+								$_SESSION['authID'] = $fid;
+								$_SESSION['role'] = "student";
                                 header("location: landing.php");
                                 exit;
 
@@ -103,7 +159,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	<link rel="stylesheet" type="text/css" href="login_res/css/main.css">
 	<!--===============================================================================================-->
 
+	<script>
+		function subStud(){
 
+			document.getElementById("studentLogin").submit();
+		}
+		function subFac(){
+			document.getElementById("loginFac").submit();
+		}
+	</script>
 
 </head>
 
@@ -116,7 +180,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 			<div class="wrap-login100 p-l-50 p-r-50 p-t-72 p-b-50">
 
-				<form class="login100-form validate-form" autocomplete="off" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST">
+				<form id="studentLogin" name="studentForm" class="login100-form validate-form" autocomplete="off" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST">
 					<span class="login100-form-title p-b-59">
 						Login
 					</span>
@@ -145,11 +209,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 						<?php };?>
 						<!-- END -->
 					</div>
+					<input type="hidden" name="action" value="login">
 
 					<div class="container-login100-form-btn">
 						<div class="wrap-login100-form-btn">
 							<div class="login100-form-bgbtn"></div>
-							<button class="login100-form-btn">
+							<button class="login100-form-btn" type="submit" onclick="subStud()">
 								Login
 							</button>
 						</div>
@@ -186,45 +251,47 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 				<div class="modal-header">
 					<p>Login Details</p>
 				</div>
-				<form name="facLogin" class="login100-form validate-form" method="POST" action="">
+				<form id="loginFac" name="facLogin" class="login100-form validate-form" method="POST" autocomplete="off" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
 					<div class="modal-body">
 						<div class="container">
-							<p>
+							
 								<div class="wrap-input100 validate-input" data-validate="Username is required">
 									Username:<br> 
 									<input name="fac_id" type="text" class="input100" placeholder="Username">
 									<span class="focus-input100"></span>
 								</div>
+								<input type="hidden" name="action" value="facultea">
 								<div class="wrap-input100 validate-input" data-validate="Password is required">
 									Password:<br> 
 									<input name="fac_pass" type="password" class="input100" placeholder="********">
 									<span class="focus-input100"></span>
 								</div>
-							</p>
+							
 						</div>
 					</div>
 				</form>
 
 				<div class="modal-footer">
-				<div>
-									<!-- Custom error using bootstrap -->
-									<?php if (isset($isError)) {?>
-									<div class="alert alert-danger" role="alert">
-										<?php
-											echo $isError;
-										?>
-									</div>
-									<?php };?>
-									<!-- END -->
-				</div>
-
-				<div class="wrap-login100-form-btn">
-					<div class="login100-form-bgbtn"></div>
-						<button class="login100-form-btn">
-							Login
-						</button>
+					<div>
+										<!-- Custom error using bootstrap -->
+										<?php if (isset($isError)) {?>
+										<div class="alert alert-danger" role="alert">
+											<?php
+												echo $isError;
+											?>
+										</div>
+										<?php };?>
+										<!-- END -->
 					</div>
-					<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+
+					<div class="wrap-login100-form-btn">
+						<div class="login100-form-bgbtn"></div>
+							<button class="login100-form-btn" type="submit" onclick="subFac()">
+								Login
+							</button>
+						</div>
+						<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+					</div>
 				</div>
 			</div>
 		</div>

@@ -18,7 +18,7 @@ session_start();
     <?php
 
     if (isset($_SESSION['authID'])) {
-        echo 'ok session is set @'. $_SESSION['authID'] ;
+        echo 'ok session is set @'. $_SESSION['authID']." | ".$_SESSION['role'] ;
     } else {
         echo 'no sesssion set';
         //redirect to login
