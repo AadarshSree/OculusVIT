@@ -93,14 +93,14 @@
 	
 	<div class="limiter">
 		<div class="container-login100">
-			<div class="login100-more" style="background-image: url('login_res/images/bg-03.jpg');">
+			<div class="login100-more" style="background-image: url('login_res/images/bg-02.jpg');">
 </div>
 
 			<div class="wrap-login100 p-l-50 p-r-50 p-t-72 p-b-50">
 
 				<form class="login100-form validate-form" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST" autocomplete="off">
 					<span class="login100-form-title p-b-59">
-						Student Sign Up
+						Faculty Sign Up
 					</span>
 
 					<div class="wrap-input100 validate-input" data-validate="Name is required">
@@ -154,23 +154,73 @@
 						</div>
 
 						<br>
-						<br>
 
+						
 					</div>
-
-					<a href="./Login.php" class="dis-block txt3 hov1 p-r-30 p-t-10 p-b-10 p-l-30">
+					<a href="#" class="dis-block txt3 hov1 p-r-30 p-t-10 p-b-10 p-l-30" data-toggle="modal" data-target="#facultyModal">
 						Log in
 						<i class="fa fa-long-arrow-right m-l-5"></i>
 					</a>
 
 					<br>
 
-					<a href="./FacultySignUp.php" class="dis-block txt3 hov1 p-r-30 p-t-10 p-b-10 p-l-30">
-						Not a Student? Faculty Registration
+					<a href="./SignUp.php" class="dis-block txt3 hov1 p-r-30 p-t-10 p-b-10 p-l-30">
+						Not a Faculty? Student Registration
 						<i class="fa fa-long-arrow-right m-l-5"></i>
 					</a>
-					
+
 				</form>
+			</div>
+		</div>
+	</div>
+
+	<!--Modal Popup division-->
+	<div class="modal fade" id="facultyModal">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<p>Login Details</p>
+				</div>
+				<form name="facLogin" class="login100-form validate-form" method="POST" action="">
+					<div class="modal-body">
+						<div class="container">
+							<p>
+								<div class="wrap-input100 validate-input" data-validate="Username is required">
+									Username:<br> 
+									<input name="fac_id" type="text" class="input100" placeholder="Username">
+									<span class="focus-input100"></span>
+								</div>
+								<div class="wrap-input100 validate-input" data-validate="Password is required">
+									Password:<br> 
+									<input name="fac_pass" type="password" class="input100" placeholder="********">
+									<span class="focus-input100"></span>
+								</div>
+							</p>
+						</div>
+					</div>
+				</form>
+
+				<div class="modal-footer">
+				<div>
+									<!-- Custom error using bootstrap -->
+									<?php if (isset($isError)) {?>
+									<div class="alert alert-danger" role="alert">
+										<?php
+											echo $isError;
+										?>
+									</div>
+									<?php };?>
+									<!-- END -->
+				</div>
+
+				<div class="wrap-login100-form-btn">
+					<div class="login100-form-bgbtn"></div>
+						<button class="login100-form-btn">
+							Login
+						</button>
+					</div>
+					<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+				</div>
 			</div>
 		</div>
 	</div>
