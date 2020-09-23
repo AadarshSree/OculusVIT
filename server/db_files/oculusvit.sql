@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 12, 2020 at 05:50 PM
+-- Generation Time: Sep 23, 2020 at 09:56 AM
 -- Server version: 10.3.16-MariaDB
 -- PHP Version: 7.1.30
 
@@ -41,8 +41,31 @@ CREATE TABLE `faculties` (
 --
 
 INSERT INTO `faculties` (`fid`, `username`, `password`, `email`, `name`) VALUES
-(1, 'master', 'master', 'email@email.com', 'godmode'),
-(2, 'aadarsh', '123', 'aadarsh.sreekumar2018@vitstudent.ac.in', 'Aadarsh Sreekumar');
+(1, 'master', '123', 'email@email.com', 'godmode'),
+(2, 'aadarsh', '123', 'aadarsh.sreekumar2018@vitstudent.ac.in', 'Aadarsh Sreekumar'),
+(3, 'vitvit', '123', 'vit@vit.com', 'vitvit');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `students`
+--
+
+CREATE TABLE `students` (
+  `sid` int(11) NOT NULL,
+  `username` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
+  `password` varchar(512) COLLATE utf8_unicode_ci NOT NULL,
+  `email` varchar(256) COLLATE utf8_unicode_ci NOT NULL,
+  `name` varchar(128) COLLATE utf8_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Dumping data for table `students`
+--
+
+INSERT INTO `students` (`sid`, `username`, `password`, `email`, `name`) VALUES
+(1, 'master', '123', 'emass', 'master'),
+(2, 'roger', '123', 'roger@rmli.cc', 'roger');
 
 --
 -- Indexes for dumped tables
@@ -56,6 +79,13 @@ ALTER TABLE `faculties`
   ADD UNIQUE KEY `username_unique` (`username`);
 
 --
+-- Indexes for table `students`
+--
+ALTER TABLE `students`
+  ADD PRIMARY KEY (`sid`),
+  ADD UNIQUE KEY `uname_unique` (`username`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -63,7 +93,13 @@ ALTER TABLE `faculties`
 -- AUTO_INCREMENT for table `faculties`
 --
 ALTER TABLE `faculties`
-  MODIFY `fid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `fid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `students`
+--
+ALTER TABLE `students`
+  MODIFY `sid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
