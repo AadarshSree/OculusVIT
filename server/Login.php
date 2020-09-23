@@ -43,8 +43,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 //Authenticated
 								$_SESSION['authID'] = $fid;
 								$_SESSION['role'] = "faculty";
+								$_SESSION['username'] = $username;
 
-                                header("location: landing.php");
+                                //header("location: landing.php");
+                                header("location: dashboard.php");
                                 exit;
 
 							}
