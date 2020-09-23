@@ -21,7 +21,7 @@
 
 			
 
-			$sql = "INSERT INTO `faculties`( `username`, `password`, `email` , `name`) VALUES (?,?,?,?)";
+			$sql = "INSERT INTO `students`( `username`, `password`, `email` , `name`) VALUES (?,?,?,?)";
 
 			if($stmt = mysqli_prepare($sql_api,$sql))
 			{
@@ -34,7 +34,8 @@
 				mysqli_stmt_bind_param($stmt , "ssss", $username , $pass , $email, $name);
 				
 				if(mysqli_stmt_execute($stmt)){
-					echo "done zo";
+					
+					header("location: Login.php");
 				}
 				else{
 					die("Fatal error (INSERTION) : ". mysqli_error($sql_api));

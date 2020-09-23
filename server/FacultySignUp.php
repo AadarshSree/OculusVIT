@@ -34,7 +34,7 @@
 				mysqli_stmt_bind_param($stmt , "ssss", $username , $pass , $email, $name);
 				
 				if(mysqli_stmt_execute($stmt)){
-					echo "done zo";
+					header("location: Login.php");
 				}
 				else{
 					die("Fatal error (INSERTION) : ". mysqli_error($sql_api));
@@ -93,8 +93,7 @@
 	
 	<div class="limiter">
 		<div class="container-login100">
-			<div class="login100-more" style="background-image: url('login_res/images/bg-02.jpg');">
-</div>
+			<div class="login100-more" style="background-image: url('login_res/images/bg-02.jpg');"></div>
 
 			<div class="wrap-login100 p-l-50 p-r-50 p-t-72 p-b-50">
 
@@ -174,56 +173,7 @@
 		</div>
 	</div>
 
-	<!--Modal Popup division-->
-	<div class="modal fade" id="facultyModal">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<p>Login Details</p>
-				</div>
-				<form name="facLogin" class="login100-form validate-form" method="POST" action="">
-					<div class="modal-body">
-						<div class="container">
-							<p>
-								<div class="wrap-input100 validate-input" data-validate="Username is required">
-									Username:<br> 
-									<input name="fac_id" type="text" class="input100" placeholder="Username">
-									<span class="focus-input100"></span>
-								</div>
-								<div class="wrap-input100 validate-input" data-validate="Password is required">
-									Password:<br> 
-									<input name="fac_pass" type="password" class="input100" placeholder="********">
-									<span class="focus-input100"></span>
-								</div>
-							</p>
-						</div>
-					</div>
-				</form>
-
-				<div class="modal-footer">
-				<div>
-									<!-- Custom error using bootstrap -->
-									<?php if (isset($isError)) {?>
-									<div class="alert alert-danger" role="alert">
-										<?php
-											echo $isError;
-										?>
-									</div>
-									<?php };?>
-									<!-- END -->
-				</div>
-
-				<div class="wrap-login100-form-btn">
-					<div class="login100-form-bgbtn"></div>
-						<button class="login100-form-btn">
-							Login
-						</button>
-					</div>
-					<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-				</div>
-			</div>
-		</div>
-	</div>
+	
 	
 <!--===============================================================================================-->
 	<script src="login_res/vendor/jquery/jquery-3.2.1.min.js"></script>
