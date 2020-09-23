@@ -1,5 +1,5 @@
 <?php
-require_once 'app/dbConnection.php';
+//require_once 'app/dbConnection.php';
 require_once 'mysqlConfig.php';
 
 session_start();
@@ -100,14 +100,19 @@ if (isset($_SESSION['authID'])) {
         $n   = @$_GET['n'];
         $eid = @$_GET['eid'];
         $ch  = @$_GET['ch'];
+
         for ($i = 1; $i <= $n; $i++) {
             $qid  = uniqid();
+            uniqid();usleep(2*1000);
             $qns  = addslashes($_POST['qns' . $i]);
             $q3   = mysqli_query($sql_api, "INSERT INTO questions VALUES  (NULL,'$eid','$qid','$qns' , '$ch' , '$i')") or die();
             
             $oaid = uniqid();
+            uniqid();usleep(2*1000);
             $obid = uniqid();
+            uniqid();usleep(2*1000);
             $ocid = uniqid();
+            uniqid();usleep(2*1000);
             $odid = uniqid();
 
             $a    = addslashes($_POST[$i . '1']);
@@ -117,8 +122,9 @@ if (isset($_SESSION['authID'])) {
 
             $qa = mysqli_query($sql_api, "INSERT INTO options VALUES  (NULL,'$qid','$a','$oaid')") or die('Error61');
             $qb = mysqli_query($sql_api, "INSERT INTO options VALUES  (NULL,'$qid','$b','$obid')") or die('Error62');
-            $qb = mysqli_query($sql_api, "INSERT INTO options VALUES  (NULL,'$qid','$c','$ocid')") or die('Error63'.mysqli_error($sql_api));
+            $qb = mysqli_query($sql_api, "INSERT INTO options VALUES  (NULL,'$qid','$c','$ocid')") or die('Error63');
             $qd = mysqli_query($sql_api, "INSERT INTO options VALUES  (NULL,'$qid','$d','$odid')") or die('Error64');
+
             $e = $_POST['ans' . $i];
 
             switch ($e) {
@@ -148,7 +154,7 @@ if (isset($_SESSION['authID'])) {
         header("location:dashboard.php?q=0");
     }
 }
-if (@$_GET['q'] == 'quiz' && @$_GET['step'] == 2 && isset($_SESSION['6e447159425d2d']) && $_SESSION['6e447159425d2d'] == "6e447159425d2d" && isset($_POST['ans']) && (!isset($_GET['delanswer']))) {
+if (@$_GET['q'] == 'quiz' && @$_GET['step'] == 2 && isset($_SESSION['checker']) && $_SESSION['checker'] == "checker" && isset($_POST['ans']) && (!isset($_GET['delanswer']))) {
     $eid   = @$_GET['eid'];
     $sn    = @$_GET['n'];
     $total = @$_GET['t'];
@@ -241,10 +247,10 @@ if (@$_GET['q'] == 'quiz' && @$_GET['step'] == 2 && isset($_SESSION['6e447159425
                     $q = mysqli_query($sql_api, "UPDATE `history` SET `score`=$s,`level`=$sn,`wrong`=$w,date= NOW()  WHERE  username = '$username' AND eid = '$eid'") or die('Error12');
                 }
             }
-            header("location:account.php?q=quiz&step=2&eid=$eid&n=$sn&t=$total") or die('Error152');
+            header("location:quizzer.php?q=quiz&step=2&eid=$eid&n=$sn&t=$total") or die('Error152');
             
         } else {
-            unset($_SESSION['6e447159425d2d']);
+            unset($_SESSION['checker']);
             $q = mysqli_query($sql_api, "UPDATE history SET status='finished' WHERE username='$_SESSION[username]' AND eid='$_GET[eid]' ") or die('Error197');
         $q = mysqli_query($sql_api, "SELECT * FROM history WHERE eid='$_GET[eid]' AND username='$_SESSION[username]'") or die('Error156');
                 while ($row = mysqli_fetch_array($q)) {
@@ -266,10 +272,10 @@ if (@$_GET['q'] == 'quiz' && @$_GET['step'] == 2 && isset($_SESSION['6e447159425
                         $q = mysqli_query($sql_api, "UPDATE `rank` SET `score`=$sun ,time=NOW() WHERE username= '$username'") or die('Error174');
                     }
                 }
-            header('location:account.php?q=result&eid=' . $_GET[eid]);
+            header('location:quizzer.php?q=result&eid=' . $_GET[eid]);
         }
     } else {
-        unset($_SESSION['6e447159425d2d']);
+        unset($_SESSION['checker']);
         $q = mysqli_query($sql_api, "UPDATE history SET status='finished' WHERE username='$_SESSION[username]' AND eid='$_GET[eid]' ") or die('Error197');
         $q = mysqli_query($sql_api, "SELECT * FROM history WHERE eid='$_GET[eid]' AND username='$_SESSION[username]'") or die('Error156');
                 while ($row = mysqli_fetch_array($q)) {
@@ -291,11 +297,11 @@ if (@$_GET['q'] == 'quiz' && @$_GET['step'] == 2 && isset($_SESSION['6e447159425
                         $q = mysqli_query($sql_api, "UPDATE `rank` SET `score`=$sun ,time=NOW() WHERE username= '$username'") or die('Error174');
                     }
                 }
-            header('location:account.php?q=result&eid=' . $_GET[eid]);
+            header('location:quizzer.php?q=result&eid=' . $_GET[eid]);
     }
 }
 
-if (@$_GET['q'] == 'quiz' && @$_GET['step'] == 2 && isset($_SESSION['6e447159425d2d']) && $_SESSION['6e447159425d2d'] == "6e447159425d2d" && (!isset($_POST['ans'])) && (isset($_GET['delanswer'])) && $_GET['delanswer'] == "delanswer") {
+if (@$_GET['q'] == 'quiz' && @$_GET['step'] == 2 && isset($_SESSION['checker']) && $_SESSION['checker'] == "checker" && (!isset($_POST['ans'])) && (isset($_GET['delanswer'])) && $_GET['delanswer'] == "delanswer") {
     $eid   = @$_GET['eid'];
     $sn    = @$_GET['n'];
     $total = @$_GET['t'];
@@ -357,10 +363,10 @@ if (@$_GET['q'] == 'quiz' && @$_GET['step'] == 2 && isset($_SESSION['6e447159425
                 $s = $s + $wrong;
                 $q = mysqli_query($sql_api, "UPDATE `history` SET `score`=$s,`level`=$sn,`wrong`=$w, date= NOW()  WHERE  username = '$username' AND eid = '$eid'") or die('Error11');
             }
-            header('location:account.php?q=quiz&step=2&eid=' . $_GET[eid] . '&n=' . $_GET[n] . '&t=' . $total);
+            header('location:quizzer.php?q=quiz&step=2&eid=' . $_GET[eid] . '&n=' . $_GET[n] . '&t=' . $total);
             
         } else {
-            unset($_SESSION['6e447159425d2d']);
+            unset($_SESSION['checker']);
             $q = mysqli_query($sql_api, "UPDATE history SET status='finished' WHERE username='$_SESSION[username]' AND eid='$_GET[eid]' ") or die('Error197');
         $q = mysqli_query($sql_api, "SELECT * FROM history WHERE eid='$_GET[eid]' AND username='$_SESSION[username]'") or die('Error156');
                 while ($row = mysqli_fetch_array($q)) {
@@ -382,10 +388,10 @@ if (@$_GET['q'] == 'quiz' && @$_GET['step'] == 2 && isset($_SESSION['6e447159425
                         $q = mysqli_query($sql_api, "UPDATE `rank` SET `score`=$sun ,time=NOW() WHERE username= '$username'") or die('Error174');
                     }
                 }
-            header('location:account.php?q=result&eid=' . $_GET[eid]);
+            header('location:quizzer.php?q=result&eid=' . $_GET[eid]);
         }
     } else {
-        unset($_SESSION['6e447159425d2d']);
+        unset($_SESSION['checker']);
         $q = mysqli_query($sql_api, "UPDATE history SET status='finished' WHERE username='$_SESSION[username]' AND eid='$_GET[eid]' ") or die('Error197');
         $q = mysqli_query($sql_api, "SELECT * FROM history WHERE eid='$_GET[eid]' AND username='$_SESSION[username]'") or die('Error156');
                 while ($row = mysqli_fetch_array($q)) {
@@ -407,7 +413,7 @@ if (@$_GET['q'] == 'quiz' && @$_GET['step'] == 2 && isset($_SESSION['6e447159425
                         $q = mysqli_query($sql_api, "UPDATE `rank` SET `score`=$sun ,time=NOW() WHERE username= '$username'") or die('Error174');
                     }
                 }
-            header('location:account.php?q=result&eid=' . $_GET[eid]);
+            header('location:quizzer.php?q=result&eid=' . $_GET[eid]);
     }
 }
 ?>
