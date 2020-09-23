@@ -97,8 +97,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             if ($fid > 0) {
                                 //Authenticated
 								$_SESSION['authID'] = $fid;
+								$_SESSION['username'] = $username;
 								$_SESSION['role'] = "student";
-                                header("location: landing.php");
+                                header("location: quizzer.php?q=1");
                                 exit;
 
 							}

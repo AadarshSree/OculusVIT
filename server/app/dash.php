@@ -5,7 +5,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<title> Dashboard || Oculus</title>
+<title> Admin || Quizzer</title>
 <link  rel="stylesheet" href="css/bootstrap.min.css"/>
  <link  rel="stylesheet" href="css/bootstrap-theme.min.css"/>    
  <link rel="stylesheet" href="css/main.css">
@@ -37,25 +37,22 @@ $(function () {
 <div class="header">
 <div class="row">
 <div class="col-lg-6">
-<span class="logo">Oculus</span></div>
-
+<span class="logo">Quizzer</span></div>
 <?php
 
-
+include_once 'dbConnection.php';
 
 session_start();
-require_once 'app/dbConnection.php';
-require_once 'mysqlConfig.php';
 
-if (! (isset($_SESSION['username'])   || isset($_SESSION['authID']) ) && $_SESSION['role'] != "faculty") {
+if (!(isset($_SESSION['username']))  || ($_SESSION['key']) != '54585c506829293a2d4c3b68543b316e2e7a2d277858545a36362e5f39') {
     session_destroy();
-    header("location:landing.php");
+    header("location:index.php");
 } else {
-    
+    $name     = $_SESSION['name'];
     $username = $_SESSION['username'];
     
-    
-    echo '<span class="pull-right top title1" ><span style="color:white"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp;&nbsp;&nbsp;&nbsp;Hello,</span> <span class="log log1" style="color:lightyellow">' . $username . '&nbsp;&nbsp;|&nbsp;&nbsp;<a href="logout.php" style="color:lightyellow"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>&nbsp;Logout</button></a></span>';
+    include_once 'dbConnection.php';
+    echo '<span class="pull-right top title1" ><span style="color:white"><span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp;&nbsp;&nbsp;&nbsp;Hello,</span> <span class="log log1" style="color:lightyellow">' . $name . '&nbsp;&nbsp;|&nbsp;&nbsp;<a href="logout.php?q=account.php" style="color:lightyellow"><span class="glyphicon glyphicon-log-out" aria-hidden="true"></span>&nbsp;Logout</button></a></span>';
 }
 ?>
 
@@ -69,34 +66,34 @@ if (! (isset($_SESSION['username'])   || isset($_SESSION['authID']) ) && $_SESSI
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="dashboard.php?q=0"><b>Dashboard</b></a>
+      <a class="navbar-brand" href="dash.php?q=0"><b>Dashboard</b></a>
     </div>
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
         <li <?php
 if (@$_GET['q'] == 0)
     echo 'class="active"';
-?>><a href="dashboard.php?q=0">Home<span class="sr-only">(current)</span></a></li>
+?>><a href="dash.php?q=0">Home<span class="sr-only">(current)</span></a></li>
         <li <?php
 if (@$_GET['q'] == 1)
     echo 'class="active"';
-?>><a href="dashboard.php?q=1">Users</a></li>
+?>><a href="dash.php?q=1">Users</a></li>
     <li <?php
 if (@$_GET['q'] == 2)
     echo 'class="active"';
-?>><a href="dashboard.php?q=2">Leaderboard</a></li>
+?>><a href="dash.php?q=2">Leaderboard</a></li>
     <li <?php
 if (@$_GET['q'] == 3)
-    echo 'class="active"'; // disabled cuz i am kul
-?>><a href="#">Feedback</a></li> 
+    echo 'class="active"';
+?>><a href="dash.php?q=3">Feedback</a></li>
         <li <?php
 if (@$_GET['q'] == 4)
     echo 'class="active"';
-?>><a href="dashboard.php?q=4">Add Quiz</a></li>
+?>><a href="dash.php?q=4">Add Quiz</a></li>
         <li <?php
 if (@$_GET['q'] == 5)
     echo 'class="active"';
-?>><a href="dashboard.php?q=5">Remove Quiz</a></li>
+?>><a href="dash.php?q=5">Remove Quiz</a></li>
       </ul>
           </div>
   </div>
@@ -107,8 +104,7 @@ if (@$_GET['q'] == 5)
 <?php
 if (@$_GET['q'] == 0) {
     
-    $result = mysqli_query($sql_api, "SELECT * FROM quiz ORDER BY date DESC") or die('Error');
-
+    $result = mysqli_query($con, "SELECT * FROM quiz ORDER BY date DESC") or die('Error');
     echo '<div class="panel"><table class="table table-striped title1"  style="vertical-align:middle">
 <tr><td style="vertical-align:middle"><b>S.N.</b></td><td style="vertical-align:middle"><b>Name</b></td><td style="vertical-align:middle"><b>Total question</b></td><td style="vertical-align:middle"><b>Marks</b></td><td style="vertical-align:middle"><b>Time limit</b></td><td style="vertical-align:middle"><b>Status</b></td><td style="vertical-align:middle"><b>Action</b></td></tr>';
     $c = 1;
@@ -129,7 +125,6 @@ if (@$_GET['q'] == 0) {
         }
     }
 }
-//Q=2 is leaderboard
 if (@$_GET['q'] == 2) {
     if(isset($_GET['show'])){
         $show = $_GET['show'];
@@ -141,37 +136,27 @@ if (@$_GET['q'] == 2) {
         $showfrom = 1;
         $showtill = 10;
     }
-    $q = mysqli_query($sql_api, "SELECT * FROM rank") or die('Error223');
+    $q = mysqli_query($con, "SELECT * FROM rank") or die('Error223');
     echo '<div class="panel title">
 <table class="table table-striped title1" >
-<tr><td style="vertical-align:middle"><b>Rank</b></td>
-<td style="vertical-align:middle"><b>Name</b></td>
-<td style="vertical-align:middle"><b>Registration Number</b></td>
-<td style="vertical-align:middle"><b>Username</b></td>
-<td style="vertical-align:middle"><b>Score</b></td></tr>';
-    
-
+<tr><td style="vertical-align:middle"><b>Rank</b></td><td style="vertical-align:middle"><b>Name</b></td><td style="vertical-align:middle"><b>Branch</b></td><td style="vertical-align:middle"><b>Username</b></td><td style="vertical-align:middle"><b>Roll number</b></td><td style="vertical-align:middle"><b>Gender</b></td><td style="vertical-align:middle"><b>Score</b></td></tr>';
     $c = $showfrom-1;
     $total = mysqli_num_rows($q);
     if($total >= $showfrom){
-        $q = mysqli_query($sql_api, "SELECT * FROM rank ORDER BY score DESC, time ASC LIMIT ".($showfrom-1).",10") or die('Error223');
+        $q = mysqli_query($con, "SELECT * FROM rank ORDER BY score DESC, time ASC LIMIT ".($showfrom-1).",10") or die('Error223');
         while ($row = mysqli_fetch_array($q)) {
             $e = $row['username'];
             $s = $row['score'];
-            $q12 = mysqli_query($sql_api, "SELECT * FROM students WHERE username='$e' ") or die('Error231');
+            $q12 = mysqli_query($con, "SELECT * FROM user WHERE username='$e' ") or die('Error231');
             while ($row = mysqli_fetch_array($q12)) {
                 $name     = $row['name'];
-                $regNum   = $row['regNum'];
+                $branch   = $row['branch'];
                 $username = $row['username'];
+                $rollno     = $row['rollno'];
+                $gender   = $row['gender'];
             }
             $c++;
-            echo '<tr><td style="color:#99cc32"><b>' . $c . '</b></td>
-            <td style="vertical-align:middle">' . $name . '</td>
-            <td style="vertical-align:middle">' . $regNum . '</td>
-            <td style="vertical-align:middle">' . $username . '</td>
-            
-            <td style="vertical-align:middle">' . $s . '</td>';
-            //<td style="vertical-align:middle">';
+            echo '<tr><td style="color:#99cc32"><b>' . $c . '</b></td><td style="vertical-align:middle">' . $name . '</td><td style="vertical-align:middle">' . $branch . '</td><td style="vertical-align:middle">' . $username . '</td><td style="vertical-align:middle">' . $rollno . '</td><td style="vertical-align:middle">' . $gender . '</td><td style="vertical-align:middle">' . $s . '</td><td style="vertical-align:middle">';
         }
     }
     else{
@@ -190,66 +175,54 @@ if (@$_GET['q'] == 2) {
     else if($show == 1 && $total!=1){
         $i = 1;
         while($i<=$total){
-            echo '<td style="vertical-align:middle;text-align:center"><a style="font-size:14px;font-family:typo;font-weight:bold" href="dashboard.php?q=2&show='.$i.'">&nbsp;'.$i.'&nbsp;</a></td>';
+            echo '<td style="vertical-align:middle;text-align:center"><a style="font-size:14px;font-family:typo;font-weight:bold" href="dash.php?q=2&show='.$i.'">&nbsp;'.$i.'&nbsp;</a></td>';
             $i++;
         }
-        echo '<td style="vertical-align:middle;text-align:center"><a style="font-size:14px;font-family:typo;font-weight:bold" href="dashboard.php?q=2&show='.($show+1).'">&nbsp;>>&nbsp;</a></td>';
+        echo '<td style="vertical-align:middle;text-align:center"><a style="font-size:14px;font-family:typo;font-weight:bold" href="dash.php?q=2&show='.($show+1).'">&nbsp;>>&nbsp;</a></td>';
     }
     else if($show != 1 && $show==$total){
-        echo '<td style="vertical-align:middle;text-align:center"><a style="font-size:14px;font-family:typo;font-weight:bold" href="dashboard.php?q=2&show='.($show-1).'">&nbsp;<<&nbsp;</a></td>';
+        echo '<td style="vertical-align:middle;text-align:center"><a style="font-size:14px;font-family:typo;font-weight:bold" href="dash.php?q=2&show='.($show-1).'">&nbsp;<<&nbsp;</a></td>';
 
         $i = 1;
         while($i<=$total){
-            echo '<td style="vertical-align:middle;text-align:center"><a style="font-size:14px;font-family:typo;font-weight:bold" href="dashboard.php?q=2&show='.$i.'">&nbsp;'.$i.'&nbsp;</a></td>';
+            echo '<td style="vertical-align:middle;text-align:center"><a style="font-size:14px;font-family:typo;font-weight:bold" href="dash.php?q=2&show='.$i.'">&nbsp;'.$i.'&nbsp;</a></td>';
             $i++;
         }
     }
     else{
-        echo '<td style="vertical-align:middle;text-align:center"><a style="font-size:14px;font-family:typo;font-weight:bold" href="dashboard.php?q=2&show='.($show-1).'">&nbsp;<<&nbsp;</a></td>';
+        echo '<td style="vertical-align:middle;text-align:center"><a style="font-size:14px;font-family:typo;font-weight:bold" href="dash.php?q=2&show='.($show-1).'">&nbsp;<<&nbsp;</a></td>';
         $i = 1;
         while($i<=$total){
-            echo '<td style="vertical-align:middle;text-align:center"><a style="font-size:14px;font-family:typo;font-weight:bold" href="dashboard.php?q=2&show='.$i.'">&nbsp;'.$i.'&nbsp;</a></td>';
+            echo '<td style="vertical-align:middle;text-align:center"><a style="font-size:14px;font-family:typo;font-weight:bold" href="dash.php?q=2&show='.$i.'">&nbsp;'.$i.'&nbsp;</a></td>';
             $i++;
         }
-        echo '<td style="vertical-align:middle;text-align:center"><a style="font-size:14px;font-family:typo;font-weight:bold" href="dashboard.php?q=2&show='.($show+1).'">&nbsp;>>&nbsp;</a></td>';
+        echo '<td style="vertical-align:middle;text-align:center"><a style="font-size:14px;font-family:typo;font-weight:bold" href="dash.php?q=2&show='.($show+1).'">&nbsp;>>&nbsp;</a></td>';
     }
     echo '</tr></table></div>';
 }
-
-//Users Tab
 if (@$_GET['q'] == 1) {
     
-    $result = mysqli_query($sql_api, "SELECT * FROM students") or die('Error');
-
+    $result = mysqli_query($con, "SELECT * FROM user") or die('Error');
     echo '<div class="panel"><table class="table table-striped title1">
-<tr><td style="vertical-align:middle"><b>S.N.</b></td>
-<td style="vertical-align:middle"><b>Name</b></td>
-<td style="vertical-align:middle"><b>Registration No</b></td>
-<td style="vertical-align:middle"><b>Email</b></td>
-<td style="vertical-align:middle"><b>Username</b></td>
-<td style="vertical-align:middle"></td></tr>';
-
+<tr><td style="vertical-align:middle"><b>S.N.</b></td><td style="vertical-align:middle"><b>Name</b></td><td style="vertical-align:middle"><b>Gender</b></td><td style="vertical-align:middle"><b>Rollno</b></td><td style="vertical-align:middle"><b>Branch</b></td><td style="vertical-align:middle"><b>Username</b></td><td style="vertical-align:middle"><b>Phno</b></td><td style="vertical-align:middle"></td></tr>';
     $c = 1;
     while ($row = mysqli_fetch_array($result)) {
         $name      = $row['name'];
-        $email      = $row['email'];
-        $regNum = $row["regNum"];
+        $phno      = $row['phno'];
+        $gender    = $row['gender'];
+        $rollno    = $row['rollno'];
+        $branch    = $row['branch'];
         $username1 = $row['username'];
         
-        echo '<tr><td style="vertical-align:middle">' . $c++ . 
-        '</td><td style="vertical-align:middle">' . $name . 
-        '</td><td style="vertical-align:middle">' . $regNum . 
-        '</td><td style="vertical-align:middle">' . $email .  
-        '</td><td style="vertical-align:middle">' . $username1 . '</td>
+        echo '<tr><td style="vertical-align:middle">' . $c++ . '</td><td style="vertical-align:middle">' . $name . '</td><td style="vertical-align:middle">' . $gender . '</td><td style="vertical-align:middle">' . $rollno . '</td><td style="vertical-align:middle">' . $branch . '</td><td style="vertical-align:middle">' . $username1 . '</td><td style="vertical-align:middle">' . $phno . '</td>
   <td style="vertical-align:middle"><a title="Delete User" href="update.php?dusername=' . $username1 . '"><b><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></b></a></td></tr>';
     }
     $c = 0;
     echo '</table></div>';
     
 }
-//feedback is kil
 if (@$_GET['q'] == 3) {
-    $result = mysqli_query($sql_api, "SELECT * FROM `feedback` ORDER BY `feedback`.`date` DESC") or die('Error');
+    $result = mysqli_query($con, "SELECT * FROM `feedback` ORDER BY `feedback`.`date` DESC") or die('Error');
     echo '<div class="panel"><table class="table table-striped title1">
 <tr><td style="vertical-align:middle"><b>S.N.</b></td><td style="vertical-align:middle"><b>Subject</b></td><td style="vertical-align:middle"><b>Username</b></td><td style="vertical-align:middle"><b>Date</b></td><td style="vertical-align:middle"><b>Time</b></td><td style="vertical-align:middle"><b>By</b></td><td style="vertical-align:middle"></td><td style="vertical-align:middle"><b>Action</b></td></tr>';
     $c = 1;
@@ -262,8 +235,8 @@ if (@$_GET['q'] == 3) {
         $username1 = $row['username'];
         $id        = $row['id'];
         echo '<tr><td style="vertical-align:middle">' . $c++ . '</td>';
-        echo '<td style="vertical-align:middle"><a title="Click to open feedback" href="dashboard.php?q=3&fid=' . $id . '">' . $subject . '</a></td><td style="vertical-align:middle">' . $username1 . '</td><td style="vertical-align:middle">' . $date . '</td><td style="vertical-align:middle">' . $time . '</td><td style="vertical-align:middle">' . $name . '</td>
-  <td style="vertical-align:middle"><a title="Open Feedback" href="dashboard.php?q=3&fid=' . $id . '"><b><span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span></b></a></td>';
+        echo '<td style="vertical-align:middle"><a title="Click to open feedback" href="dash.php?q=3&fid=' . $id . '">' . $subject . '</a></td><td style="vertical-align:middle">' . $username1 . '</td><td style="vertical-align:middle">' . $date . '</td><td style="vertical-align:middle">' . $time . '</td><td style="vertical-align:middle">' . $name . '</td>
+  <td style="vertical-align:middle"><a title="Open Feedback" href="dash.php?q=3&fid=' . $id . '"><b><span class="glyphicon glyphicon-folder-open" aria-hidden="true"></span></b></a></td>';
         echo '<td style="vertical-align:middle"><a title="Delete Feedback" href="update.php?fdid=' . $id . '"><b><span class="glyphicon glyphicon-trash" aria-hidden="true"></span></b></a></td>
 
   </tr>';
@@ -273,7 +246,7 @@ if (@$_GET['q'] == 3) {
 if (@$_GET['fid']) {
     echo '<br />';
     $id = @$_GET['fid'];
-    $result = mysqli_query($sql_api, "SELECT * FROM feedback WHERE id='$id' ") or die('Error');
+    $result = mysqli_query($con, "SELECT * FROM feedback WHERE id='$id' ") or die('Error');
     while ($row = mysqli_fetch_array($result)) {
         $name     = $row['name'];
         $subject  = $row['subject'];
@@ -287,8 +260,6 @@ if (@$_GET['fid']) {
 <span style="line-height:35px;padding:5px;">&nbsp;<b>Time:</b>&nbsp;' . $time . '</span><span style="line-height:35px;padding:5px;">&nbsp;<b>By:</b>&nbsp;' . $name . '</span><br />' . $feedback . '</div></div>';
     }
 }
-
-//Add Le Quiz
 if (@$_GET['q'] == 4 && !(@$_GET['step'])) {
     echo ' 
 <div class="row">
@@ -326,7 +297,7 @@ if (@$_GET['q'] == 4 && !(@$_GET['step'])) {
 <div class="form-group">
   <label class="col-md-12 control-label" for="time"></label>  
   <div class="col-md-12">
-  <input id="time" name="time" placeholder="Enter time limit for test in minutes" class="form-control input-md" min="1" type="number">
+  <input id="time" name="time" placeholder="Enter time limit for test in minute" class="form-control input-md" min="1" type="number">
     
   </div>
 </div>
@@ -412,11 +383,9 @@ if (@$_GET['q'] == 4 && (@$_GET['step']) == 2) {
     
     
 }
-
-//Quiz remover
 if (@$_GET['q'] == 5) {
     
-    $result = mysqli_query($sql_api, "SELECT * FROM quiz ORDER BY date DESC") or die('Error');
+    $result = mysqli_query($con, "SELECT * FROM quiz ORDER BY date DESC") or die('Error');
     echo '<div class="panel"><table class="table table-striped title1">
 <tr><td style="vertical-align:middle"><b>S.N.</b></td><td style="vertical-align:middle"><b>Topic</b></td><td style="vertical-align:middle"><b>Total question</b></td><td style="vertical-align:middle"><b>Marks</b></td><td style="vertical-align:middle"><b>Time limit</b></td><td style="vertical-align:middle"><b>Action</b></td></tr>';
     $c = 1;
