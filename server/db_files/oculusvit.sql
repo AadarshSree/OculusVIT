@@ -27,8 +27,8 @@ SET time_zone = "+00:00";
 --
 -- Table structure for table `faculties`
 --
-
-CREATE TABLE `faculties` (
+DROP TABLE IF EXISTS `faculties`;
+CREATE TABLE IF NOT EXISTS`faculties` (
   `fid` int(11) NOT NULL,
   `username` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
   `password` varchar(512) COLLATE utf8_unicode_ci NOT NULL,
@@ -50,8 +50,8 @@ INSERT INTO `faculties` (`fid`, `username`, `password`, `email`, `name`) VALUES
 --
 -- Table structure for table `students`
 --
-
-CREATE TABLE `students` (
+DROP TABLE IF EXISTS `students`;
+CREATE TABLE IF NOT EXISTS `students` (
   `sid` int(11) NOT NULL,
   `username` varchar(128) COLLATE utf8_unicode_ci NOT NULL,
   `password` varchar(512) COLLATE utf8_unicode_ci NOT NULL,
