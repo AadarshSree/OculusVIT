@@ -156,7 +156,7 @@
 
 						
 					</div>
-					<a href="#" class="dis-block txt3 hov1 p-r-30 p-t-10 p-b-10 p-l-30" data-toggle="modal" data-target="#facultyModal">
+					<a href="./Login.php" class="dis-block txt3 hov1 p-r-30 p-t-10 p-b-10 p-l-30">
 						Log in
 						<i class="fa fa-long-arrow-right m-l-5"></i>
 					</a>
