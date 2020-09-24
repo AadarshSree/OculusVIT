@@ -208,7 +208,7 @@ iframe {
 }
 
 .login100-more::before {
-  content: "a";
+  content: "";
   display: block;
   position: absolute;
   z-index: -1;
