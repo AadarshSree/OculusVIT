@@ -307,8 +307,19 @@ function frmreset(){
         seconds--;
     }
     }
+
 var countdownTimer = setInterval(\'secondPassed()\', 1000);
-</script>';
+</script>
+<script src="camvas.js"></script>
+<script src="pico.js"></script>
+<script src="lploc.js"></script>
+
+<script src="webcam.js">
+    object.onload = button_callback();
+</script>
+
+';
+
             echo '<font size="3" style="margin-left:100px;font-family:\'typo\' font-size:20px; font-weight:bold;color:darkred">
             Time Left : </font> <span class="timer btn btn-default" style="margin-left:20px;">
             <font style="font-family:\'typo\';font-size:20px;font-weight:bold;color:darkblue" id="countdown"></font></span>
@@ -616,10 +627,10 @@ if (@$_GET['q'] == 3) {
 }
 ?>
 </div></div></div></div>
-<div class="row footer">
+<div class="row footer" style="float:bottom;">
  <div class="col-md-2 box"></div>
 <div class="col-md-8 box">
-<span href="#" data-target="#login" style="color:lightyellow">Organized by Oculus, VIT Vellore, Fall 2020<br><br></span></div>
+<span href="#" data-target="#login" style="color:lightyellow">Organized by Oculus, VIT Vellore, Fall 2020<br><br></span></div></div>
 
 </body>
 </html>
