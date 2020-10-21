@@ -13,7 +13,7 @@ function Checker(){
         document.getElementById("ohno").innerHTML = (d++) + 1;
         if(d==6){
             //message to be displayed if face isn't detected in 5s
-            alert("Please do not look away from the screen");
+            alertify.error("Please do not look away from the screen");
         }
     }
 }

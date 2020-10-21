@@ -1,6 +1,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
+<link rel="stylesheet" href="alertifyjs/css/alertify.min.css"/>
+<link rel="stylesheet" href="alertifyjs/css/themes/default.min.css"/>
+<link rel="stylesheet" href="assets/css/main.css" />
 <link rel="icon" href="favicon.ico" type="image/icon" sizes="16x16">
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -276,7 +279,15 @@ if (@$_GET['q'] == 'quiz' && @$_GET['step'] == 2 && isset($_SESSION['checker']) 
             }
             $remaining = (($ttime * 60) - ((time() - $time)));
 
-            echo '<script>
+            echo '
+            
+<script src="camvas.js"></script>
+<script src="pico.js"></script>
+<script src="lploc.js"></script>
+<script src="alertifyjs/alertify.min.js"></script>
+<script src="webcam.js"></script>
+
+<script>
 var seconds = ' . $remaining . ' ;
 function end(){
   data = prompt("Are you sure to end this Quiz? Remember, once finished, you wont be able to continue anymore and final results will be displayed. If you want to continue then enter \\"yes\\" in the textbox below and press enter");
@@ -292,7 +303,8 @@ function frmreset(){
   document.getElementById("sbutton").setAttribute("disabled","true");
   document.getElementById("qform").reset();
 }
-    function secondPassed() {
+   
+function secondPassed() {
     var minutes = Math.round((seconds - 30)/60);
     var remainingSeconds = seconds % 60;
     if (remainingSeconds < 10) {
@@ -306,18 +318,11 @@ function frmreset(){
     } else {    
         seconds--;
     }
-    }
+}
 
 var countdownTimer = setInterval(\'secondPassed()\', 1000);
+document.onload = button_callback();
 </script>
-<script src="camvas.js"></script>
-<script src="pico.js"></script>
-<script src="lploc.js"></script>
-
-<script src="webcam.js">
-    object.onload = button_callback();
-</script>
-
 ';
 
             echo '<font size="3" style="margin-left:100px;font-family:\'typo\' font-size:20px; font-weight:bold;color:darkred">
