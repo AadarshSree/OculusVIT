@@ -190,7 +190,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 					<div class="wrap-input100 validate-input" data-validate="Username is required">
 						<span class="label-input100">Username</span>
-						<input class="input100" type="text" name="username" placeholder="Username">
+						<input class="input100" type="text" name="username" placeholder="Username" autofocus>
 						<span class="focus-input100"></span>
 					</div>
 
@@ -231,10 +231,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 							New?&nbsp; Sign Up Now
 							<i class="fa fa-long-arrow-right m-l-5"></i>
 						</a>
+							
+						<a href="./reset_student.php" class="dis-block txt3 hov1 p-r-30 p-t-30 p-b-10 p-l-10">
+							Forgot Password?&nbsp; Reset Password Now!
+							<i class="fa fa-long-arrow-right m-l-5"></i>
+						</a>
+							<hr>
 
-							<br><br><br><br><br>
-
-						<a href="#" class="dis-block txt3 hov1 p-r-30 p-t-30 p-b-10 p-l-10" data-toggle="modal" data-target="#facultyModal">
+						<a href="#" class="dis-block txt3 hov1 p-r-30 p-t-30 p-b-10 p-l-10" data-toggle="modal" data-target="#facultyModal" style="font-size: 18pt;">
 							Faculty Login
 							<i class="fa fa-long-arrow-right m-l-5"></i>
 						</a>
@@ -260,7 +264,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 							
 								<div class="wrap-input100 validate-input" data-validate="Username is required">
 									Username:<br> 
-									<input name="fac_id" type="text" class="input100" placeholder="Username">
+									<input name="fac_id" type="text" class="input100" placeholder="Username" >
 									<span class="focus-input100"></span>
 								</div>
 								<input type="hidden" name="action" value="facultea">
