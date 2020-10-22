@@ -1,3 +1,21 @@
+function sendToDB(){
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET','violationUpdate.php', true);
+
+    xhr.onload = function(){
+        if(this.status == 200){
+            var data = JSON.parse(this.responseText);
+            //var uname = data.username;
+            //var ename = data.examName;
+            //var date = data.date;
+
+            //alertify.error("VIOLATION ALERT: \nUsername: "+uname+"\nExam Name: "+ename+"\nDate: "+date);
+            console.log('Violation Updated: ' + data);
+        }
+    }
+    xhr.send()
+}
+
 var initialized = false;
 var detected_status;
 var d;
@@ -7,13 +25,18 @@ function Checker(){
         d=0;
         document.getElementById("Var").innerHTML = "Detected";
         document.getElementById("ohno").innerHTML = "-";
+        alertify.closeAll();
     }
     else if(detected_status==0){
         document.getElementById("Var").innerHTML = "Not Detected";
         document.getElementById("ohno").innerHTML = (d++) + 1;
         if(d==6){
             //message to be displayed if face isn't detected in 5s
-            alertify.error("Please do not look away from the screen");
+            alertify.alert("Please do not look away from the screen", function(){
+                if(detected_status==1)
+                    alertify.success("Continue with quiz");
+            });
+            sendToDB();
         }
     }
 }
@@ -155,4 +178,3 @@ document.write( '<div width=640 style=\"width: 50%; border: solid black 2px; pad
 document.write( '<span id=\"Var\" style=\"font-size:16pt;\"></span><br>\n' );
 document.write( '<span id=\"ohno\" style=\"font-size:16pt;\"></span>\n' );
 document.write( '</div></div>' );
-

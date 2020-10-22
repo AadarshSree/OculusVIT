@@ -279,8 +279,8 @@ if (@$_GET['q'] == 'quiz' && @$_GET['step'] == 2 && isset($_SESSION['checker']) 
             }
             $remaining = (($ttime * 60) - ((time() - $time)));
 
+//Adding the webcam and alertify libraries at the start of the test
             echo '
-            
 <script src="camvas.js"></script>
 <script src="pico.js"></script>
 <script src="lploc.js"></script>
@@ -326,11 +326,11 @@ document.onload = button_callback();
 ';
 
             echo '<font size="3" style="margin-left:100px;font-family:\'typo\' font-size:20px; font-weight:bold;color:darkred">
-            Time Left : </font> <span class="timer btn btn-default" style="margin-left:20px;">
-            <font style="font-family:\'typo\';font-size:20px;font-weight:bold;color:darkblue" id="countdown"></font></span>
-            <span class="timer btn btn-primary" style="margin-left:50px" onclick="end()">
-            <span class=" glyphicon glyphicon-off"></span>&nbsp;&nbsp;
-            <font style="font-size:12px;font-weight:bold">Finish Quiz</font></span>';
+Time Left : </font> <span class="timer btn btn-default" style="margin-left:20px;">
+<font style="font-family:\'typo\';font-size:20px;font-weight:bold;color:darkblue" id="countdown"></font></span>
+<span class="timer btn btn-primary" style="margin-left:50px" onclick="end()">
+<span class=" glyphicon glyphicon-off"></span>&nbsp;&nbsp;
+<font style="font-size:12px;font-weight:bold">Finish Quiz</font></span>';
             $eid   = @$_GET['eid'];
             $sn    = @$_GET['n'];
             $total = @$_GET['t'];
@@ -343,7 +343,7 @@ document.onload = button_callback();
             }
             
             echo '<form id="qform" action="update.php?q=quiz&step=2&eid=' . $eid . '&n=' . $sn . '&t=' . $total . '&qid=' . $qid . '" method="POST"  class="form-horizontal">
-<br />';
+<br/>';
             $q = mysqli_query($sql_api, "SELECT * FROM user_answer WHERE qid='$qid' AND username='$_SESSION[username]' AND eid='$_GET[eid]'") or die("Error222");
             if (mysqli_num_rows($q) > 0) {
                 $row = mysqli_fetch_array($q);
