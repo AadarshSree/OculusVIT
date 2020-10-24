@@ -1,6 +1,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
+<link rel="stylesheet" href="alertifyjs/css/alertify.min.css"/>
+<link rel="stylesheet" href="alertifyjs/css/themes/default.min.css"/>
+<link rel="stylesheet" href="assets/css/main.css" />
 <link rel="icon" href="favicon.ico" type="image/icon" sizes="16x16">
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -276,7 +279,15 @@ if (@$_GET['q'] == 'quiz' && @$_GET['step'] == 2 && isset($_SESSION['checker']) 
             }
             $remaining = (($ttime * 60) - ((time() - $time)));
 
-            echo '<script>
+//Adding the webcam and alertify libraries at the start of the test
+            echo '
+<script src="camvas.js"></script>
+<script src="pico.js"></script>
+<script src="lploc.js"></script>
+<script src="alertifyjs/alertify.min.js"></script>
+<script src="webcam.js"></script>
+
+<script>
 var seconds = ' . $remaining . ' ;
 function end(){
   data = prompt("Are you sure to end this Quiz? Remember, once finished, you wont be able to continue anymore and final results will be displayed. If you want to continue then enter \\"yes\\" in the textbox below and press enter");
@@ -292,7 +303,8 @@ function frmreset(){
   document.getElementById("sbutton").setAttribute("disabled","true");
   document.getElementById("qform").reset();
 }
-    function secondPassed() {
+   
+function secondPassed() {
     var minutes = Math.round((seconds - 30)/60);
     var remainingSeconds = seconds % 60;
     if (remainingSeconds < 10) {
@@ -306,15 +318,19 @@ function frmreset(){
     } else {    
         seconds--;
     }
-    }
+}
+
 var countdownTimer = setInterval(\'secondPassed()\', 1000);
-</script>';
+document.onload = button_callback();
+</script>
+';
+
             echo '<font size="3" style="margin-left:100px;font-family:\'typo\' font-size:20px; font-weight:bold;color:darkred">
-            Time Left : </font> <span class="timer btn btn-default" style="margin-left:20px;">
-            <font style="font-family:\'typo\';font-size:20px;font-weight:bold;color:darkblue" id="countdown"></font></span>
-            <span class="timer btn btn-primary" style="margin-left:50px" onclick="end()">
-            <span class=" glyphicon glyphicon-off"></span>&nbsp;&nbsp;
-            <font style="font-size:12px;font-weight:bold">Finish Quiz</font></span>';
+Time Left : </font> <span class="timer btn btn-default" style="margin-left:20px;">
+<font style="font-family:\'typo\';font-size:20px;font-weight:bold;color:darkblue" id="countdown"></font></span>
+<span class="timer btn btn-primary" style="margin-left:50px" onclick="end()">
+<span class=" glyphicon glyphicon-off"></span>&nbsp;&nbsp;
+<font style="font-size:12px;font-weight:bold">Finish Quiz</font></span>';
             $eid   = @$_GET['eid'];
             $sn    = @$_GET['n'];
             $total = @$_GET['t'];
@@ -327,7 +343,7 @@ var countdownTimer = setInterval(\'secondPassed()\', 1000);
             }
             
             echo '<form id="qform" action="update.php?q=quiz&step=2&eid=' . $eid . '&n=' . $sn . '&t=' . $total . '&qid=' . $qid . '" method="POST"  class="form-horizontal">
-<br />';
+<br/>';
             $q = mysqli_query($sql_api, "SELECT * FROM user_answer WHERE qid='$qid' AND username='$_SESSION[username]' AND eid='$_GET[eid]'") or die("Error222");
             if (mysqli_num_rows($q) > 0) {
                 $row = mysqli_fetch_array($q);
@@ -616,10 +632,10 @@ if (@$_GET['q'] == 3) {
 }
 ?>
 </div></div></div></div>
-<div class="row footer">
+<div class="row footer" style="float:bottom;">
  <div class="col-md-2 box"></div>
 <div class="col-md-8 box">
-<span href="#" data-target="#login" style="color:lightyellow">Organized by Oculus, VIT Vellore, Fall 2020<br><br></span></div>
+<span href="#" data-target="#login" style="color:lightyellow">Organized by Oculus, VIT Vellore, Fall 2020<br><br></span></div></div>
 
 </body>
 </html>
