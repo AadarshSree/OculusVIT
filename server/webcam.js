@@ -2,9 +2,11 @@ function sendToDB(){
     var xhr = new XMLHttpRequest();
     xhr.open('GET','violationUpdate.php', true);
 
-    xhr.onload = function(){
-        if(this.status == 200){
-            var data = JSON.parse(this.responseText);
+    xhr.send()
+
+    xhr.onreadystatechange = function(){
+        if(this.status == 200 && this.readyState == 4){
+            var data = this.response;
             //var uname = data.username;
             //var ename = data.examName;
             //var date = data.date;
@@ -13,7 +15,6 @@ function sendToDB(){
             console.log('Violation Updated: ' + data);
         }
     }
-    xhr.send()
 }
 
 var initialized = false;
