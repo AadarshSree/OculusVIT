@@ -243,6 +243,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 							<i class="fa fa-long-arrow-right m-l-5"></i>
 						</a>
 
+						<a href="index.html" class="dis-block txt3 hov1 p-r-30 p-t-30 p-b-10 p-l-10" style="font-size: 18pt;">
+							Webcam Compatibility
+							<i class="fa fa-long-arrow-right m-l-5"></i>
+						</a>
+
 					</div>
 
 				</form>
