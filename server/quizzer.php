@@ -78,7 +78,7 @@ if (@$_GET['q'] == 2)
 if (@$_GET['q'] == 3)
     echo 'class="active"';
 ?>><a href="quizzer.php?q=3"><span class="glyphicon glyphicon-stats" aria-hidden="true"></span>&nbsp;Leaderboard</a></li></ul>
-            
+
       </div>
   </div>
 </nav>
@@ -635,7 +635,10 @@ if (@$_GET['q'] == 3) {
 <div class="row footer" style="float:bottom;">
  <div class="col-md-2 box"></div>
 <div class="col-md-8 box">
-<span href="#" data-target="#login" style="color:lightyellow">Organized by Oculus, VIT Vellore, Fall 2020<br><br></span></div></div>
+<span href="#" data-target="#login" style="color:lightyellow">Organized by Oculus, VIT Vellore, Fall 2020<br><br>
+    <p><a href = "FAQ.html">FAQ</a></p>
+    <p><a href = "guidelines.html">Guidelines</a></p>
+</span></div></div>
 
 </body>
 </html>
