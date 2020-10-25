@@ -97,6 +97,10 @@ if (@$_GET['q'] == 4)
 if (@$_GET['q'] == 5)
     echo 'class="active"';
 ?>><a href="dashboard.php?q=5">Remove Quiz</a></li>
+<li <?php
+if (@$_GET['q'] == 6)
+    echo 'class="active"';
+?>><a href="dashboard.php?q=6">View Violations</a></li>
       </ul>
           </div>
   </div>
@@ -432,6 +436,17 @@ if (@$_GET['q'] == 5) {
     $c = 0;
     echo '</table></div>';
     
+}
+
+if (@$_GET['q'] == 6){
+
+    //First, display all the quizes and have a button for each quiz
+
+    //After clicking on a quiz, list the students that attended that quiz and have a button for each student
+
+    //After clicking on a student, list the violations in order of the timestamps
+
+    //gg ez
 }
 ?>
 </div>

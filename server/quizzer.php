@@ -636,8 +636,8 @@ if (@$_GET['q'] == 3) {
  <div class="col-md-2 box"></div>
 <div class="col-md-8 box">
 <span href="#" data-target="#login" style="color:lightyellow">Organized by Oculus, VIT Vellore, Fall 2020<br><br>
-    <p><a href = "FAQ.html">FAQ</a></p>
-    <p><a href = "guidelines.html">Guidelines</a></p>
+    <p><a style="color:lightyellow" href = "FAQ.html"><u>FAQ</u></a></p>
+    <p><a style="color:lightyellow" href = "guidelines.html"><u>Guidelines</u></a></p>
 </span></div></div>
 
 </body>
