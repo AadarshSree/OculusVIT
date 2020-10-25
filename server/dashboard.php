@@ -134,6 +134,7 @@ if (@$_GET['q'] == 0) {
         }
     }
 }
+
 //Q=2 is leaderboard
 if (@$_GET['q'] == 2) {
     if(isset($_GET['show'])){
@@ -448,6 +449,23 @@ if (@$_GET['q'] == 6){
     //After clicking on a student, list the violations in order of the timestamps
 
     //gg ez
+
+    $result = mysqli_query($sql_api, "SELECT * FROM quiz WHERE status='enabled' ORDER BY date DESC") or die('Error');
+    echo '<div class="panel"><table class="table table-striped title1">
+<tr><td style="vertical-align:middle"><b>S.N.</b></td><td style="vertical-align:middle"><b>Topic</b></td><td style="vertical-align:middle"><b>Total question</b></td><td style="vertical-align:middle"><b>Marks</b></td><td style="vertical-align:middle"><b>Time limit</b></td><td style="vertical-align:middle"><b>Action</b></td></tr>';
+    $c = 1;
+    while ($row = mysqli_fetch_array($result)) {
+        $title   = $row['title'];
+        $total   = $row['total'];
+        $correct = $row['correct'];
+        $time    = $row['time'];
+        $eid     = $row['eid'];
+        echo '<tr><td style="vertical-align:middle">' . $c++ . '</td><td style="vertical-align:middle;font-weight:bold;">' . $title . '</td><td style="vertical-align:middle">' . $total . '</td><td style="vertical-align:middle">' . $correct * $total . '</td><td style="vertical-align:middle">' . $time . '&nbsp;min</td>
+  <td style="vertical-align:middle"><b><a href="quizMonitor.php?&eid=' . $eid . '" class="btn" style="margin:0px;background:orange;color:white">&nbsp;<span class="title1"><b>Monitor</b></span></a></b></td></tr>';
+    }
+    $c = 0;
+    echo '</table></div>';
+
 }
 ?>
 </div>
