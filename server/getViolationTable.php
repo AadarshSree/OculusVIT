@@ -20,17 +20,18 @@
         else if (mysqli_num_rows($rs) > 1){
 
             $row = mysqli_fetch_array($rs);
+            $cc = mysqli_num_rows($rs);
 
             echo "<tr class='bg-danger'>
-                <td>1</td>
+                <td>$cc</td>
                 <td>".$row['username']."</td>
                 <td>".$row['time']."</td>
                 </tr>";
-            $cc = 2;
+                $cc--;
             while($row = mysqli_fetch_array($rs)){
 
                 echo "<tr>
-                <td>".$cc++."</td>
+                <td>".$cc--."</td>
                 <td>".$row['username']."</td>
                 <td>".$row['time']."</td>
                 </tr>";

@@ -44,7 +44,7 @@
             $qq = "UPDATE `students` SET `password` = '".$_POST["passwd"]."' WHERE `students`.`sid` = ".$_POST["resetID"].";";
             if(mysqli_query($sql_api,$qq)){
 
-                header("location: Login.php");
+                header("location: Login.php?gm=2");
 
             }
             else{

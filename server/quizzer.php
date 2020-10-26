@@ -104,10 +104,10 @@ if (@$_GET['q'] == 1) {
 
         if ($rowcount == 0) {
             echo '<tr><td style="vertical-align:middle">' . $c++ . '</td><td style="vertical-align:middle">' . $title . '</td><td style="vertical-align:middle">' . $total . '</td><td style="vertical-align:middle">+' . $correct . '</td><td style="vertical-align:middle">-' . $wrong . '</td><td style="vertical-align:middle">' . $correct * $total . '</td><td style="vertical-align:middle">' . $time . '&nbsp;min</td>
-  <td style="vertical-align:middle"><b><a href="quizzer.php?q=quiz&step=2&eid=' . $eid . '&n=1&t=' . $total . '&start=start" class="btn" style="color:#FFFFFF;background:darkgreen;font-size:12px;padding:7px;padding-left:10px;padding-right:10px"><span class="glyphicon glyphicon-new-window" aria-hidden="true"></span>&nbsp;<span><b>Start</b></span></a></b></td></tr>';
+  <td style="vertical-align:middle"><b><a href="quizzer.php?q=quiz&step=2&eid=' . $eid . '&n=1&t=' . $total . '&start=start" class="btn" style="color:#FFFFFF;background:darkgreen;font-size:12px;padding:7px;padding-left:10px;padding-right:10px"><span class="glyphicon glyphicon-new-window" aria-hidden="true"></span>&nbsp;<span><b style="color:white;">Start</b></span></a></b></td></tr>';
         } 
         else {
-            $q = mysqli_query($sql_api, "SELECT * FROM history WHERE username='$_SESSION[username]' AND eid='$eid' ") or die('Error197');
+            $q = mysqli_query($sql_api, "SELECT * FROM history WHERE username='$username' AND eid='$eid' ") or die('Error197');
 
             while ($row = mysqli_fetch_array($q)) {
                 $timec  = $row['timestamp'];
@@ -125,11 +125,11 @@ if (@$_GET['q'] == 1) {
             if ($remaining > 1 && $qstatus == "enabled" && $status == "ongoing") 
             {
                 echo '<tr style="color:darkgreen"><td style="vertical-align:middle">' . $c++ . '</td><td style="vertical-align:middle">' . $title . '&nbsp;<span title="Quiz Already Attempted" class="glyphicon glyphicon-ok" aria-hidden="true"></span></td><td style="vertical-align:middle">' . $total . '</td><td style="vertical-align:middle">+' . $correct . '</td><td style="vertical-align:middle">-' . $wrong . '</td><td style="vertical-align:middle">' . $correct * $total . '</td><td style="vertical-align:middle">' . $time . '&nbsp;min</td>
-  <td style="vertical-align:middle"><b><a href="quizzer.php?q=quiz&step=2&eid=' . $eid . '&n=1&t=' . $total . '&start=start" class="btn" style="margin:0px;background:darkorange;color:white">&nbsp;<span class="title1"><b>Continue</b></span></a></b></td></tr>';
+  <td style="vertical-align:middle"><b><a href="quizzer.php?q=quiz&step=2&eid=' . $eid . '&n=1&t=' . $total . '&start=start" class="btn" style="margin:0px;background:darkorange;color:white">&nbsp;<span class="title1"><b style="color:white;">Continue</b></span></a></b></td></tr>';
             } else 
             {
                 echo '<tr style="color:darkgreen"><td style="vertical-align:middle">' . $c++ . '</td><td style="vertical-align:middle">' . $title . '&nbsp;<span title="This quiz is already attempted" class="glyphicon glyphicon-ok" aria-hidden="true"></span></td><td style="vertical-align:middle">' . $total . '</td><td style="vertical-align:middle">+' . $correct . '</td><td style="vertical-align:middle">-' . $wrong . '</td><td style="vertical-align:middle">' . $correct * $total . '</td><td style="vertical-align:middle">' . $time . '&nbsp;min</td>
-  <td style="vertical-align:middle"><b><a href="quizzer.php?q=result&eid=' . $eid . '" class="btn" style="margin:0px;background:darkred;color:white">&nbsp;<span class="title1"><b>View Result</b></span></a></b></td></tr>';
+  <td style="vertical-align:middle"><b><a href="quizzer.php?q=result&eid=' . $eid . '" class="btn" style="margin:0px;background:darkred;color:white">&nbsp;<span class="title1"><b style="color:white;">View Result</b></span></a></b></td></tr>';
             }
         }
     }
@@ -551,7 +551,7 @@ if (@$_GET['q'] == 2) {
             $total = $row['total'];
         }
         $c++;
-        echo '<tr><td style="vertical-align:middle">' . $c . '</td><td style="vertical-align:middle">' . $title . '</td><td style="vertical-align:middle">' . $total . '</td><td style="vertical-align:middle">' . $r . '</td><td style="vertical-align:middle">' . $w . '</td><td style="vertical-align:middle">' . ($total - $r - $w) . '</td><td style="vertical-align:middle">' . $s . '</td><td style="vertical-align:middle"><b><a href="quizzer.php?q=result&eid=' . $eid . '" class="btn" style="margin:0px;background:darkred;color:white">&nbsp;<span class="title1"><b>View Result</b></td></tr>';
+        echo '<tr><td style="vertical-align:middle">' . $c . '</td><td style="vertical-align:middle">' . $title . '</td><td style="vertical-align:middle">' . $total . '</td><td style="vertical-align:middle">' . $r . '</td><td style="vertical-align:middle">' . $w . '</td><td style="vertical-align:middle">' . ($total - $r - $w) . '</td><td style="vertical-align:middle">' . $s . '</td><td style="vertical-align:middle"><b><a href="quizzer.php?q=result&eid=' . $eid . '" class="btn" style="margin:0px;background:darkred;color:white">&nbsp;<span class="title1"><b style="color:white;">View Result</b></td></tr>';
     }
     echo '</table></div>';
 }
@@ -636,8 +636,8 @@ if (@$_GET['q'] == 3) {
  <div class="col-md-2 box"></div>
 <div class="col-md-8 box">
 <span href="#" data-target="#login" style="color:lightyellow">Organized by Oculus, VIT Vellore, Fall 2020<br><br>
-    <p><a style="color:lightyellow" href = "FAQ.html"><u>FAQ</u></a></p>
-    <p><a style="color:lightyellow" href = "guidelines.html"><u>Guidelines</u></a></p>
+    <p><a style="color:lightyellow" href = "compatibility/FAQ.html"><u>FAQ</u></a></p>
+    <p><a style="color:lightyellow" href = "compatibility/guidelines.html"><u>Guidelines</u></a></p>
 </span></div></div>
 
 </body>

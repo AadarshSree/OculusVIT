@@ -1,6 +1,6 @@
 <?php
 session_start();
-
+error_reporting(E_ALL ^ E_WARNING);
 // #################
 
 // NEED TO INCLUDE FEATURE:
@@ -12,6 +12,8 @@ session_start();
 require_once "mysqlConfig.php";
 
 $isError = null;
+
+
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
@@ -137,7 +139,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
 	<!--we need a new favicon-->
-	<link rel="icon" type="image/png" href="login_res/images/icons/favicon.ico" />
+	<link rel="icon" type="image/png" href="favicon.ico" />
 
 	<!--===============================================================================================-->
 	<link rel="stylesheet" type="text/css" href="login_res/vendor/bootstrap/css/bootstrap.min.css">
@@ -161,8 +163,32 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 	<link rel="stylesheet" type="text/css" href="login_res/css/util.css">
 	<link rel="stylesheet" type="text/css" href="login_res/css/main.css">
 	<!--===============================================================================================-->
-
+	<link rel="stylesheet" href="./alertifyjs/css/alertify.min.css" />
+	<!-- include a theme -->
+	<link rel="stylesheet" href="./alertifyjs/css/themes/default.min.css" />
+	<script src="alertifyjs/alertify.min.js"></script>
+	
+	
 	<script>
+
+		function showNotif(){
+			alertify.set('notifier','position', 'top-right');
+
+		<?php
+			if(isset($_GET["gm"])){
+				$gm = $_GET["gm"];
+				
+				if($gm==1){
+					echo 'alertify.success("Sucessfully registered!");';
+				}
+				else if ($gm ==2){
+					
+					echo 'alertify.success("Password Successfully Reset!");';
+				}
+
+			}
+		?>}
+
 		function subStud(){
 
 			document.getElementById("studentLogin").submit();
@@ -174,12 +200,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 </head>
 
-<body style="background-color: #999999;">
+<body style="background-color: #999999;" onload="showNotif();">
 
-	<div class="limiter">
+	<div class="limiter" >
 		<div class="container-login100">
-			<div class="login100-more" style="background-image: url('login_res/images/bg-03.jpg');">
+			<div class="login100-more" style="background-image: url('login_res/images/bg-03.jpg');" id="particles-js">
 			</div>
+
+			<script src="particles/particles.js"></script>
+	<script src="particles/partanim.js"></script>
 
 			<div class="wrap-login100 p-l-50 p-r-50 p-t-72 p-b-50">
 

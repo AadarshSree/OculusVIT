@@ -7,6 +7,7 @@
 
 ###############
 	require_once "mysqlConfig.php";
+	error_reporting(E_ALL ^ E_WARNING);
 
 	$name = $email = $username = $pass = $verifypass = "";
 	$err = null;
@@ -14,14 +15,14 @@
 	if($_SERVER["REQUEST_METHOD"] == "POST"){
 
 		if(empty(trim($_POST["name"])) || empty(trim($_POST["email"])) || empty(trim($_POST["username"])) 
-		|| empty(trim($_POST["pass"])) || empty(trim($_POST["verifypass"])) ){
+		|| empty(trim($_POST["pass"])) || empty(trim($_POST["regNum"])) || empty(trim($_POST["verifypass"])) ){
 			$err = "Please enter all details.";
 		}
 		else if( trim($_POST["pass"]) === trim($_POST["verifypass"]) ){
 
 			
 
-			$sql = "INSERT INTO `students`( `username`, `password`, `email` , `name`) VALUES (?,?,?,?)";
+			$sql = "INSERT INTO `students`( `username`, `password`, `regNum`, `email` , `name`) VALUES (?,?,?,?,?)";
 
 			if($stmt = mysqli_prepare($sql_api,$sql))
 			{
@@ -30,12 +31,13 @@
 				$email = trim($_POST["email"]);
 				$name = trim($_POST["name"]);
 				$pass = trim($_POST["pass"]);
+				$regNum = trim($_POST["regNum"]);
 
-				mysqli_stmt_bind_param($stmt , "ssss", $username , $pass , $email, $name);
+				mysqli_stmt_bind_param($stmt , "sssss", $username , $pass, $regNum, $email, $name);
 				
 				if(mysqli_stmt_execute($stmt)){
 					
-					header("location: Login.php");
+					header("location: Login.php?gm=1");
 				}
 				else{
 					die("Fatal error (INSERTION) : ". mysqli_error($sql_api));
@@ -110,15 +112,21 @@
 						<span class="focus-input100"></span>
 					</div>
 
-					<div class="wrap-input100 validate-input" data-validate = "Valid email is required: ex@abc.xyz">
-						<span class="label-input100">Email</span>
-						<input class="input100" type="text" name="email" placeholder="Email address...">
+					<div class="wrap-input100 validate-input" data-validate="Registration Number is required">
+						<span class="label-input100">Registration Number</span>
+						<input class="input100" type="text" name="regNum" placeholder="Registration Number...">
 						<span class="focus-input100"></span>
 					</div>
 
 					<div class="wrap-input100 validate-input" data-validate="Username is required">
 						<span class="label-input100">Username</span>
 						<input class="input100" type="text" name="username" placeholder="Username...">
+						<span class="focus-input100"></span>
+					</div>
+
+					<div class="wrap-input100 validate-input" data-validate = "Valid email is required: ex@abc.xyz">
+						<span class="label-input100">Email</span>
+						<input class="input100" type="text" name="email" placeholder="Email address...">
 						<span class="focus-input100"></span>
 					</div>
 

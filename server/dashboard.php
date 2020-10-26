@@ -85,10 +85,8 @@ if (@$_GET['q'] == 1)
 if (@$_GET['q'] == 2)
     echo 'class="active"';
 ?>><a href="dashboard.php?q=2">Leaderboard</a></li>
-    <li <?php
-if (@$_GET['q'] == 3)
-    echo 'class="active"'; // disabled cuz i am kul
-?>><a href="#">Feedback</a></li> 
+
+
         <li <?php
 if (@$_GET['q'] == 4)
     echo 'class="active"';
@@ -101,7 +99,7 @@ if (@$_GET['q'] == 5)
 <li <?php
 if (@$_GET['q'] == 6)
     echo 'class="active"';
-?>><a href="dashboard.php?q=6">View Violations</a></li>
+?>><a href="dashboard.php?q=6">Monitor Quiz</a></li>
       </ul>
           </div>
   </div>

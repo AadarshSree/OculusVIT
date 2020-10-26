@@ -176,9 +176,9 @@ function button_callback() {
 }
 //document.write( '<p><input type=\"button\" value=\"Start webcam feed\" onclick=\"button_callback()\"></p>\n' );
 //document.write( '<link  rel="stylesheet" href="app/css/font.css">' );
-document.write( '<div style=\" width: 45%; position: fixed; right:0px; top:30%; padding: 3px; border: solid black 2px; background-color: black; box-shadow: 5px 10px 8px darkgrey; border-radius: 5px 0px 0px 5px;\">\n' );
-document.write( '<canvas width=640 height=480 style=\"width: 50%; border: solid black 2px; right: 10px; border-radius: 5px;\"></canvas>\n' );
-document.write( '<div width=640 style=\"width: 50%; border: solid black 2px; padding: 3px; background-color: white; border-radius: 5px;\">\n' );
+document.write( '<div style=\" width: 16%; position: fixed; right:20%; top:40%; padding: 3px; border: solid black 2px; background-color: black; box-shadow: 5px 10px 8px darkgrey; border-radius: 5px 0px 0px 5px;\">\n' );
+document.write( '<canvas width=640 height=480 style=\"width: 100%; border: solid black 2px; position: relative; border-radius: 5px;\"></canvas>\n' );
+document.write( '<div width=640 style=\"border: solid black 2px; padding: 3px; background-color: white; border-radius: 5px;\">\n' );
 document.write( '<center><b><span id=\"Var\" style=\"font-size:14pt;\"></span><br>\n' );
 document.write( '<span id=\"ohno\" style=\"font-size:12pt;\"></span></b></center>\n' );
 document.write( '</div></div>' );
