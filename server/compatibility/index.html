@@ -1,0 +1,271 @@
+<!DOCTYPE HTML>
+
+<html>
+	<head>
+		<title>Face Detection</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link rel="stylesheet" href="../assets/css/main.css" />
+		<meta http-equiv="X-UA-Compatible" content="chrome=1">
+		<script src="../camvas.js"></script>
+		<script src="../pico.js"></script>
+		<script src="../lploc.js"></script>
+        <script src="../alertifyjs/alertify.min.js"></script>
+        <link rel="stylesheet" href="../alertifyjs/css/alertify.min.css"/>
+        <link rel="stylesheet" href="../alertifyjs/css/themes/default.min.css"/>
+	</head>
+	<style>
+		#canvas {
+    		border:6px solid #c0766c;
+    		z-index: 1;
+    	}
+    	#three {
+      background-color: #34495e;
+    }
+
+				
+
+
+	</style>
+	<body>
+
+		<!-- Header -->
+			<header id="header">
+				<div class="inner">
+					<a href="index.html" class="logo"><strong>Oculus</strong></a>
+					<nav id="nav">
+						<a href="index.html">Home</a>
+						<a href="guidelines.html">Guidelines</a>
+						<a href="FAQ.html">FAQ</a>
+					</nav>
+					<a href="#navPanel" class="navPanelToggle"><span class="fa fa-bars"></span></a>
+				</div>
+			</header>
+
+		<!-- Banner -->
+			<section id="banner">
+				<div class="inner">
+					<header>
+						<h1>Welcome to Oculus</h1>
+						<h3>Try out our Face Detection before you jump into Exams</h3>
+					</header>
+
+					<div class="flex ">
+
+						<div>
+							<span class="icon fa-camera"></span>
+							<h3>Webcam</h3>
+						</div>
+					</div>
+
+					<footer>
+						<a href="#three" class="button">Enable Webcam</a>
+					</footer>
+				</div>
+			</section>
+
+
+		<!-- Three -->
+			<section id="three" class="wrapper align-center">
+				<div class="inner">
+					<div class="flex flex-2">
+
+					<script>
+		var initialized = false;
+		var detected_status;
+		var d;
+
+		function Checker(){
+			if(detected_status==1){
+				d=0;
+				document.getElementById("Var").innerHTML = "Detected";
+				document.getElementById("ohno").innerHTML = "";
+			}
+			else if(detected_status==0){
+				document.getElementById("Var").innerHTML = "Not Detected";
+				document.getElementById("ohno").innerHTML = (d++) + 1;
+				if(d==6){
+					alertify.error('Kindly do not look away from the Screen. Make sure the room you attend the test is well lit if this problem persists.');
+				}
+			}
+		}
+
+		function button_callback() {
+			/*
+				(0) check whether we're already running face detection
+			*/
+			if(initialized)
+				return; // if yes, then do not initialize everything again
+			/*
+				(1) initialize the pico.js face detector
+			*/
+			var update_memory = pico.instantiate_detection_memory(5); // we will use the detecions of the last 5 frames
+			var facefinder_classify_region = function(r, c, s, pixels, ldim) {return -1.0;};
+			var cascadeurl = 'https://raw.githubusercontent.com/nenadmarkus/pico/c2e81f9d23cc11d1a612fd21e4f9de0921a5d0d9/rnt/cascades/facefinder';
+			fetch(cascadeurl).then(function(response) {
+				response.arrayBuffer().then(function(buffer) {
+					var bytes = new Int8Array(buffer);
+					facefinder_classify_region = pico.unpack_cascade(bytes);
+					console.log('* facefinder loaded');
+				})
+			})
+			/*
+				(2) initialize the lploc.js library with a pupil localizer
+			*/
+			var do_puploc = function(r, c, s, nperturbs, pixels, nrows, ncols, ldim) {return [-1.0, -1.0];};
+			var puplocurl = 'https://drone.nenadmarkus.com/data/blog-stuff/puploc.bin'
+			fetch(puplocurl).then(function(response) {
+				response.arrayBuffer().then(function(buffer) {
+					var bytes = new Int8Array(buffer);
+					do_puploc = lploc.unpack_localizer(bytes);
+					console.log('* puploc loaded');
+				})
+			})
+			/*
+				(3) get the drawing context on the canvas and define a function to transform an RGBA image to grayscale
+			*/
+			var ctx = document.getElementsByTagName('canvas')[0].getContext('2d');
+			function rgba_to_grayscale(rgba, nrows, ncols) {
+				var gray = new Uint8Array(nrows*ncols);
+				for(var r=0; r<nrows; ++r)
+					for(var c=0; c<ncols; ++c)
+						// gray = 0.2*red + 0.7*green + 0.1*blue
+						gray[r*ncols + c] = (2*rgba[r*4*ncols+4*c+0]+7*rgba[r*4*ncols+4*c+1]+1*rgba[r*4*ncols+4*c+2])/10;
+				return gray;
+			}
+			/*
+				(4) this function is called each time a video frame becomes available
+			*/
+			var processfn = function(video, dt) {
+				// render the video frame to the canvas element and extract RGBA pixel data
+				ctx.drawImage(video, 0, 0);
+				var rgba = ctx.getImageData(0, 0, 640, 480).data;
+				// prepare input to `run_cascade`
+				image = {
+					"pixels": rgba_to_grayscale(rgba, 480, 640),
+					"nrows": 480,
+					"ncols": 640,
+					"ldim": 640
+				}
+				params = {
+					"shiftfactor": 0.1, // move the detection window by 10% of its size
+					"minsize": 100,     // minimum size of a face
+					"maxsize": 1000,    // maximum size of a face
+					"scalefactor": 1.1  // for multiscale processing: resize the detection window by 10% when moving to the higher scale
+				}
+				// run the cascade over the frame and cluster the obtained detections
+				// dets is an array that contains (r, c, s, q) quadruplets
+				// (representing row, column, scale and detection score)
+				dets = pico.run_cascade(image, facefinder_classify_region, params);
+				dets = update_memory(dets);
+				dets = pico.cluster_detections(dets, 0.2); // set IoU threshold to 0.2
+				// draw detections
+				for(i=0; i<dets.length; ++i)
+					// check the detection score
+					// if it's above the threshold, draw it
+					// (the constant 50.0 is empirical: other cascades might require a different one)
+					if(dets[i][3]>50.0)
+					{
+						var r, c, s;
+						//
+						ctx.beginPath();
+						ctx.arc(dets[i][1], dets[i][0], dets[i][2]/2, 0, 2*Math.PI, false);
+						ctx.lineWidth = 3;
+						ctx.strokeStyle = 'red';
+						ctx.stroke();
+						detected_status=1;
+
+						//
+						// find the eye pupils for each detected face
+						// starting regions for localization are initialized based on the face bounding box
+						// (parameters are set empirically)
+						// first eye
+						r = dets[i][0] - 0.075*dets[i][2];
+						c = dets[i][1] - 0.175*dets[i][2];
+						s = 0.35*dets[i][2];
+						[r, c] = do_puploc(r, c, s, 63, image)
+						if(r>=0 && c>=0)
+						{
+							ctx.beginPath();
+							ctx.arc(c, r, 1, 0, 2*Math.PI, false);
+							ctx.lineWidth = 3;
+							ctx.strokeStyle = 'red';
+							ctx.stroke();
+						}
+						// second eye
+						r = dets[i][0] - 0.075*dets[i][2];
+						c = dets[i][1] + 0.175*dets[i][2];
+						s = 0.35*dets[i][2];
+						[r, c] = do_puploc(r, c, s, 63, image)
+						if(r>=0 && c>=0)
+						{
+							ctx.beginPath();
+							ctx.arc(c, r, 1, 0, 2*Math.PI, false);
+							ctx.lineWidth = 3;
+							ctx.strokeStyle = 'red';
+							ctx.stroke();
+						}
+					}
+					else{
+						detected_status=0;
+					}
+			}
+			/*
+				(5) instantiate camera handling (see https://github.com/cbrandolino/camvas)
+			*/
+			var mycamvas = new camvas(ctx, processfn);
+			/*
+				(6) it seems that everything went well
+			*/
+			initialized = true;
+			setInterval(Checker ,1000);
+		}
+		
+	</script>
+	<input type="button" value="Start Webcam Feed" onclick="button_callback()">
+		<p><center><canvas id = "canvas" width=640 height=480></canvas></center></p>
+		<p id="Var" style="font-size:24pt; color: black"></p>
+		<p id="ohno" style="font-size:24pt; color: red;"></p>
+
+
+					</div>
+				</div>
+			</section>
+
+		<!-- Footer 
+			<footer id="footer">
+				<div class="inner">
+
+					<h3>Get In Touch</h3>
+
+					<form action="#" method="post">
+
+						<div class="field half first">
+							<label for="name">Name</label>
+							<input name="name" id="name" type="text" placeholder="Name">
+						</div>
+						<div class="field half">
+							<label for="email">Email</label>
+							<input name="email" id="email" type="email" placeholder="Email">
+						</div>
+						<div class="field">
+							<label for="message">Message</label>
+							<textarea name="message" id="message" rows="6" placeholder="Message"></textarea>
+						</div>
+						<ul class="actions">
+							<li><input value="Send Message" class="button alt" type="submit"></li>
+						</ul>
+					</form>
+
+
+				</div>
+			</footer> -->
+
+		<!-- Scripts -->
+			<script src="../assets/js/jquery.min.js"></script>
+			<script src="../assets/js/skel.min.js"></script>
+			<script src="../assets/js/util.js"></script>
+			<script src="../assets/js/main.js"></script>
+
+	</body>
+</html>

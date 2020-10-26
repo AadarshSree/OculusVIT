@@ -48,7 +48,8 @@
 <body>
     
     <nav class="navbar navbar-dark bg-dark">
-        <span class="navbar-brand mb-0 h1">Oculus-VIT</span>
+        
+        <a class="navbar-brand" href="Login.php">Oculus-VIT</a>
     </nav>
     <br><br>
 

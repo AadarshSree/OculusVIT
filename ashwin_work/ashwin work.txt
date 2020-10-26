@@ -1,4 +1,0 @@
-[*] all bootstrap files must be embedded through their CDN
-[*] follow directory structure 
-[*] dont use more than 1 custom css file for a page unless its an embed
-[*] No redundant / junk code

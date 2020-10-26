@@ -6,10 +6,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <title> Dashboard || Oculus</title>
-<link  rel="stylesheet" href="css/bootstrap.min.css"/>
- <link  rel="stylesheet" href="css/bootstrap-theme.min.css"/>    
- <link rel="stylesheet" href="css/main.css">
- <link  rel="stylesheet" href="css/font.css">
+<link  rel="stylesheet" href="app/css/bootstrap.min.css"/>
+ <link  rel="stylesheet" href="app/css/bootstrap-theme.min.css"/>    
+ <link rel="stylesheet" href="app/css/main.css">
+ <link  rel="stylesheet" href="app/css/font.css">
  <script src="js/jquery.js" type="text/javascript"></script>
 
   <script src="js/bootstrap.min.js"  type="text/javascript"></script>
@@ -33,15 +33,14 @@ $(function () {
 </head>
 
 <body  style="background:#eee;">
-<body  style="background:#eee;">
+<!-- <body  style="background:#eee;"> -->
 <div class="header">
 <div class="row">
 <div class="col-lg-6">
-<span class="logo">Oculus</span></div>
+<span class="logo">Oculus</span>
+</div>
 
 <?php
-
-
 
 session_start();
 require_once 'app/dbConnection.php';
@@ -60,6 +59,7 @@ if (! (isset($_SESSION['username'])   || isset($_SESSION['authID']) ) && $_SESSI
 ?>
 
 </div></div>
+
 <nav class="navbar navbar-default title1">
   <div class="container-fluid">
     <div class="navbar-header">
@@ -97,6 +97,7 @@ if (@$_GET['q'] == 4)
 if (@$_GET['q'] == 5)
     echo 'class="active"';
 ?>><a href="dashboard.php?q=5">Remove Quiz</a></li>
+
 <li <?php
 if (@$_GET['q'] == 6)
     echo 'class="active"';
@@ -133,6 +134,7 @@ if (@$_GET['q'] == 0) {
         }
     }
 }
+
 //Q=2 is leaderboard
 if (@$_GET['q'] == 2) {
     if(isset($_GET['show'])){
@@ -447,6 +449,23 @@ if (@$_GET['q'] == 6){
     //After clicking on a student, list the violations in order of the timestamps
 
     //gg ez
+
+    $result = mysqli_query($sql_api, "SELECT * FROM quiz WHERE status='enabled' ORDER BY date DESC") or die('Error');
+    echo '<div class="panel"><table class="table table-striped title1">
+<tr><td style="vertical-align:middle"><b>S.N.</b></td><td style="vertical-align:middle"><b>Topic</b></td><td style="vertical-align:middle"><b>Total question</b></td><td style="vertical-align:middle"><b>Marks</b></td><td style="vertical-align:middle"><b>Time limit</b></td><td style="vertical-align:middle"><b>Action</b></td></tr>';
+    $c = 1;
+    while ($row = mysqli_fetch_array($result)) {
+        $title   = $row['title'];
+        $total   = $row['total'];
+        $correct = $row['correct'];
+        $time    = $row['time'];
+        $eid     = $row['eid'];
+        echo '<tr><td style="vertical-align:middle">' . $c++ . '</td><td style="vertical-align:middle;font-weight:bold;">' . $title . '</td><td style="vertical-align:middle">' . $total . '</td><td style="vertical-align:middle">' . $correct * $total . '</td><td style="vertical-align:middle">' . $time . '&nbsp;min</td>
+  <td style="vertical-align:middle"><b><a href="quizMonitor.php?&eid=' . $eid . '" class="btn" style="margin:0px;background:orange;color:white">&nbsp;<span class="title1"><b>Monitor</b></span></a></b></td></tr>';
+    }
+    $c = 0;
+    echo '</table></div>';
+
 }
 ?>
 </div>
