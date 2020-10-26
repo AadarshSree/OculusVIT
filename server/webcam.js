@@ -24,19 +24,21 @@ var d;
 function Checker(){
     if(detected_status==1){
         d=0;
-        document.getElementById("Var").innerHTML = "Detected";
-        document.getElementById("ohno").innerHTML = "-";
+        var str = "Detected";
+        document.getElementById("Var").innerHTML = str.fontcolor('green');
+        document.getElementById("ohno").innerHTML = ("-").fontcolor('green');
         alertify.closeAll();
     }
     else if(detected_status==0){
-        document.getElementById("Var").innerHTML = "Not Detected";
-        document.getElementById("ohno").innerHTML = (d++) + 1;
+        document.getElementById("Var").innerHTML = ("Not Detected").fontcolor('darkred');
+        var str =  (d++) + 1;
+        document.getElementById("ohno").innerHTML =str.toString().fontcolor('darkred');
         if(d==6){
             //message to be displayed if face isn't detected in 5s
             alertify.alert("Please do not look away from the screen", function(){
                 if(detected_status==1)
                     alertify.success("Continue with quiz");
-            });
+            }).setHeader("TEST VIOLATION");
             sendToDB();
         }
     }
@@ -173,9 +175,10 @@ function button_callback() {
     setInterval(Checker ,1000);
 }
 //document.write( '<p><input type=\"button\" value=\"Start webcam feed\" onclick=\"button_callback()\"></p>\n' );
-document.write( '<div style=\"position: fixed; right:0px; padding: 3px; border: solid black 2px; \">\n' );
-document.write( '<canvas width=640 height=480 style=\"width: 50%; border: solid black 2px; right: 10px;\"></canvas>\n' );
-document.write( '<div width=640 style=\"width: 50%; border: solid black 2px; padding: 3px;\">\n' );
-document.write( '<span id=\"Var\" style=\"font-size:16pt;\"></span><br>\n' );
-document.write( '<span id=\"ohno\" style=\"font-size:16pt;\"></span>\n' );
+//document.write( '<link  rel="stylesheet" href="app/css/font.css">' );
+document.write( '<div style=\" width: 45%; position: fixed; right:0px; top:30%; padding: 3px; border: solid black 2px; background-color: black; box-shadow: 5px 10px 8px darkgrey; border-radius: 5px 0px 0px 5px;\">\n' );
+document.write( '<canvas width=640 height=480 style=\"width: 50%; border: solid black 2px; right: 10px; border-radius: 5px;\"></canvas>\n' );
+document.write( '<div width=640 style=\"width: 50%; border: solid black 2px; padding: 3px; background-color: white; border-radius: 5px;\">\n' );
+document.write( '<center><b><span id=\"Var\" style=\"font-size:14pt;\"></span><br>\n' );
+document.write( '<span id=\"ohno\" style=\"font-size:12pt;\"></span></b></center>\n' );
 document.write( '</div></div>' );
