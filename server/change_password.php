@@ -17,7 +17,15 @@
             if(mysqli_num_rows($rs) >0){
 
                 $row = mysqli_fetch_array($rs);
+
+                if( (time() - strtotime($row["timestamp"])) > 121){
+
+                    //die( "OTP Expired" );
+
+                }
                 if($_POST["otp"] == $row["otp"]){
+
+                    
                     
                     $auth = true;
                 }
