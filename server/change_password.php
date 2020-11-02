@@ -20,7 +20,7 @@
 
                 if( (time() - strtotime($row["timestamp"])) > 121){
 
-                    //die( "OTP Expired" );
+                    die( "OTP Expired" );
 
                 }
                 if($_POST["otp"] == $row["otp"]){
