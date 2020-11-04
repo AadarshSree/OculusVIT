@@ -5,6 +5,7 @@
 
 OculusVIT is an innovative malpractice free quiz examination platform which uses real time face tracking to monitor the examinee. 💯
 ***
+[![OculusVIT Demo Video](https://i.insider.com/59a59a8d79bbfd1d008b601a?width=200&format=png)](https://www.youtube.com/watch?v=RKykzOK43ZI)
 # Installation Instructions
 
 - Install [XAMPP](https://www.apachefriends.org/index.html)
